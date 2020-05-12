@@ -1,5 +1,4 @@
-Dominik Bogielczyk
+author: Dominik Bogielczyk
 
-# air_hockey
-project - PSiO
-SFML
+title: air_hockey - project - PSiO
+technology: SFML
