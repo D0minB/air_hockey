@@ -9,7 +9,6 @@ int main() {
         std::cerr << "Could not load texture of table" << std::endl;
         return 1;
     }
-
     sf::Font ttf;
     ttf.loadFromFile("fonts/ariendezze.ttf");
     std::string s("");
