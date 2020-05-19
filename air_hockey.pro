@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        circle.cpp \
         main.cpp \
         player.cpp
 
@@ -17,4 +18,5 @@ CONFIG(debug, debug|release){
 }
 
 HEADERS += \
+    circle.h \
     player.h
