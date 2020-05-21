@@ -1,4 +1,6 @@
 #include "player.h"
+#include "striker.h"
+#include "puck.h"
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(630+200, 840), "AIR HOCKEY");
@@ -8,6 +10,12 @@ int main() {
     if (!texture_table.loadFromFile("images/table.png")) {
         std::cerr << "Could not load texture of table" << std::endl;
         return 1;
+    }
+
+    sf::Music cling;
+    if (!cling.openFromFile("sounds/cling.wav"))
+    {
+        std::cerr << "Sound not load" << std::endl;
     }
 
     //FONT
@@ -35,10 +43,10 @@ int main() {
     Player player2(280,710,sf::Color::Red,480,770);
 
     //PUCK
-    Circle puck(30,sf::Vector2f(280,425),100,100); // up and down limit - default
+    Puck puck(30,sf::Vector2f(280,425),400,400);
     puck.setFillColor(sf::Color(255,140,0));
     puck.setOutlineThickness(5);
-    puck.setOutlineColor(sf::Color::Black);
+    puck.setOutlineColor(sf::Color(255,140,0));
     puck.setOrigin(30,30);
 
     sf::Clock clock;
@@ -56,7 +64,8 @@ int main() {
         //PLAYERS MOVE
         player1.Player_animate(time,0);
         player2.Player_animate(time,1);
-        //puck.animate(time,1);
+        //        puck.animate(time,0);
+        //        std::cout << puck.getPosition().y << std::endl;
 
         window.clear(sf::Color::White);
 
@@ -76,12 +85,33 @@ int main() {
         txt_big.setString(ss.str());
         window.draw(txt_big);
 
+        std::vector<Striker> strikers={*player1.get_striker(),*player2.get_striker()};
+        bool play_cling=puck.animate(time,strikers);
+
+        if(play_cling)
+        {
+            cling.play();
+            cling.setPlayingOffset(sf::seconds(0.f));
+
+        }
+        window.draw(puck);
+
+        if(puck.getPosition().x>195 && puck.getPosition().x<375)
+        {
+            if(puck.getPosition().y>785)
+            {
+                player1.add_point();
+            }
+            else if(puck.getPosition().y<55)
+            {
+                player2.add_point();
+            }
+        }
+
         window.draw(*player1.get_striker());
         window.draw(*player1.get_striker_internal());
         window.draw(*player2.get_striker());
         window.draw(*player2.get_striker_internal());
-
-        window.draw(puck);
 
         window.display();
     }

@@ -2,14 +2,14 @@
 
 Player::Player(const int &pos_x,const int &pos_y,const sf::Color &c, const int &up_limit,const int&down_limit)
 {
-    Circle *striker=new Circle(50,sf::Vector2f(pos_x,pos_y),250,250,up_limit,down_limit);
+    Striker *striker=new Striker(50,sf::Vector2f(pos_x,pos_y),400,400,up_limit,down_limit);
     striker_=striker;
     striker_->setFillColor(c);
     striker_->setOutlineThickness(5);
     striker_->setOutlineColor(sf::Color::Black);
     striker_->setOrigin(50,50);
 
-    Circle *striker2=new Circle(20,sf::Vector2f(pos_x,pos_y),250,250,up_limit,down_limit);
+    Striker *striker2=new Striker(20,sf::Vector2f(pos_x,pos_y),400,400,up_limit,down_limit);
     striker_internal_=striker2;
     striker_internal_->setFillColor(c);
     striker_internal_->setOutlineThickness(5);
@@ -33,12 +33,12 @@ void Player::add_point()
     points_++;
 }
 
-Circle* Player::get_striker() const
+Striker* Player::get_striker() const
 {
     return striker_;
 }
 
-Circle* Player::get_striker_internal() const
+Striker* Player::get_striker_internal() const
 {
     return striker_internal_;
 }

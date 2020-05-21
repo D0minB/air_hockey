@@ -4,9 +4,10 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        circle.cpp \
         main.cpp \
-        player.cpp
+        player.cpp \
+        puck.cpp \
+        striker.cpp
 
 INCLUDEPATH += "C:\Users\DELL\Desktop\Dominik\SFML\SFML-2.5.1\include"
 
@@ -18,5 +19,7 @@ CONFIG(debug, debug|release){
 }
 
 HEADERS += \
-    circle.h \
-    player.h
+    headers.h \
+    player.h \
+    puck.h \
+    striker.h
