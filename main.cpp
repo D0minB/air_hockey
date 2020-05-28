@@ -7,20 +7,20 @@ int main() {
     window.setVerticalSyncEnabled(true); //limit klatek
 
     sf::Texture texture_table;
-    if (!texture_table.loadFromFile("images/table.png")) {
+    if (!texture_table.loadFromFile("resources/images/table.png")) {
         std::cerr << "Could not load texture of table" << std::endl;
         return 1;
     }
 
     sf::Music cling;
-    if (!cling.openFromFile("sounds/cling.wav"))
+    if (!cling.openFromFile("resources/sounds/cling.wav"))
     {
         std::cerr << "Sound not load" << std::endl;
     }
 
     //FONT
     sf::Font ttf;
-    ttf.loadFromFile("fonts/ariendezze.ttf");
+    ttf.loadFromFile("resources/fonts/ariendezze.ttf");
     std::string s("");
     sf::Text txt(s,ttf);
     txt.setCharacterSize(40);
