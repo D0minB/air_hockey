@@ -15,7 +15,7 @@ public:
     void add_point();
     Striker* get_striker() const;
     Striker* get_striker_internal() const;
-    void Player_animate(const sf::Time &elapsed, const bool&);
+    void Player_animate(const sf::Time &elapsed, const bool&,const sf::Vector2f&);
 
 
 };

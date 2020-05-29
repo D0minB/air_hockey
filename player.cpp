@@ -43,9 +43,9 @@ Striker* Player::get_striker_internal() const
     return striker_internal_;
 }
 
-void Player::Player_animate(const sf::Time &elapsed, const bool &b)
+void Player::Player_animate(const sf::Time &elapsed, const bool &b, const sf::Vector2f &puck_position)
 {
-    striker_->animate(elapsed,b);
+    striker_->animate(elapsed,b,puck_position);
     striker_internal_->setPosition(striker_->getPosition().x,striker_->getPosition().y);
 }
 
