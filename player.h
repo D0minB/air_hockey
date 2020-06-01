@@ -16,6 +16,7 @@ public:
     Striker* get_striker() const;
     Striker* get_striker_internal() const;
     void Player_animate(const sf::Time &elapsed, const bool&,const sf::Vector2f&);
+    void reset(const sf::Vector2f &position);
 
 
 };

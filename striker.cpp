@@ -23,7 +23,7 @@ void Striker::animate(const sf::Time &elapsed, const bool& arrows, const sf::Vec
     if(arrows)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && getPosition().y>up_limit_
-               && !strike_bounds.contains(puck_position.x,puck_position.y+25))
+                && !strike_bounds.contains(puck_position.x,puck_position.y+25))
         {
             this->move(0,-std::abs(v_y_*elapsed.asSeconds()));
             add_acceleration=true;
@@ -35,13 +35,13 @@ void Striker::animate(const sf::Time &elapsed, const bool& arrows, const sf::Vec
             add_acceleration=true;
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && this->getPosition().x>25+this->getRadius()
-               && !strike_bounds.contains(puck_position.x+25,puck_position.y) )
+                && !strike_bounds.contains(puck_position.x+25,puck_position.y) )
         {
             this->move(-std::abs(v_x_*elapsed.asSeconds()),0);
             add_acceleration=true;
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && getPosition().x<535-this->getRadius()
-               && !strike_bounds.contains(puck_position.x-25,puck_position.y) )
+                && !strike_bounds.contains(puck_position.x-25,puck_position.y) )
         {
             this->move(std::abs(v_x_*elapsed.asSeconds()),0);
             add_acceleration=true;
@@ -56,25 +56,24 @@ void Striker::animate(const sf::Time &elapsed, const bool& arrows, const sf::Vec
             add_acceleration=true;
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::S) && getPosition().y<down_limit_
-               && !strike_bounds.contains(puck_position.x,puck_position.y-25))
+                && !strike_bounds.contains(puck_position.x,puck_position.y-25))
         {
             this->move(0,std::abs(v_y_*elapsed.asSeconds()));
             add_acceleration=true;
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) && getPosition().x>25+this->getRadius()
-               && !strike_bounds.contains(puck_position.x+25,puck_position.y))
+                && !strike_bounds.contains(puck_position.x+25,puck_position.y))
         {
             this->move(-std::abs(v_x_*elapsed.asSeconds()),0);
             add_acceleration=true;
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) && getPosition().x<535-this->getRadius()
-                && !strike_bounds.contains(puck_position.x+25,puck_position.y))
+                && !strike_bounds.contains(puck_position.x-25,puck_position.y))
         {
             this->move(std::abs(v_x_*elapsed.asSeconds()),0);
             add_acceleration=true;
         }
     }
-
 
     if(add_acceleration)
     {

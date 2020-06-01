@@ -6,8 +6,8 @@ Puck::Puck()
 
 }
 
-Puck::Puck(const float &r, const sf::Vector2f &position, const int &v_x, const int &v_y)
-    : sf::CircleShape(r),v_x_(v_x),v_y_(v_y)
+Puck::Puck(const float &r, const sf::Vector2f &position)
+    : sf::CircleShape(r)
 {
     this->setPosition(position);
 }
@@ -87,16 +87,23 @@ int Puck::check_goal()
     {
         if(this->getPosition().y>785)
         {
-            this->setPosition(sf::Vector2f(280,425-100));
+            this->setPosition(sf::Vector2f(280,425+100));
             this->reset_velocity();
             return 1;
         }
         else if(this->getPosition().y<55)
         {
-            this->setPosition(sf::Vector2f(280,425+100));
+            this->setPosition(sf::Vector2f(280,425-100));
             this->reset_velocity();
             return 2;
         }
     }
     return 0;
+}
+
+void Puck::reset(const sf::Vector2f &position)
+{
+    v_x_=-150;
+    v_y_=0;
+    this->setPosition(position);
 }
