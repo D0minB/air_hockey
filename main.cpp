@@ -4,7 +4,7 @@
 
 sf::Text print(const sf::Font &ttf,const std::string& s,const int &size, const sf::Color &color, const sf::Vector2f &position)
 {
-   std::stringstream ss;
+    std::stringstream ss;
 
     sf::Text text(s,ttf);
     text.setCharacterSize(size);
@@ -13,6 +13,7 @@ sf::Text print(const sf::Font &ttf,const std::string& s,const int &size, const s
 
     return text;
 }
+
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(560, 840), "AIR HOCKEY");
@@ -96,8 +97,12 @@ int main() {
     sf::Clock clock;
 
     bool menu=1;
+    bool intro=0;
     bool match=0;
     bool end_of_match = 0;
+
+    //settings
+    int points_limit=7;
 
     while (window.isOpen())
     {
@@ -117,6 +122,15 @@ int main() {
                 if(menu_buttons[0].getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
                 {
                     menu=false;
+                    intro=true;
+                }
+            }
+
+            if (intro && event.type == sf::Event::KeyReleased)
+            {
+                if (event.key.code == sf::Keyboard::Enter)
+                {
+                    intro=false;
                     match=true;
                 }
             }
@@ -156,7 +170,7 @@ int main() {
         if(menu)
         {
             sf::Text title = print(ttf,"\tAIR\nHOCKEY\n\n",75,sf::Color::Black,sf::Vector2f(140,160));
-            sf::Text start_text = print(ttf,"START",25,sf::Color::White,sf::Vector2f(240,455));
+            sf::Text buttons_text = print(ttf,"START",25,sf::Color::White,sf::Vector2f(240,455));
 
             for(const auto &el : menu_buttons)
             {
@@ -164,7 +178,68 @@ int main() {
             }
 
             window.draw(title);
-            window.draw(start_text);
+            window.draw(buttons_text);
+        }
+
+        if(intro)
+        {
+            sf::Text rules;
+            if(points_limit!=0)
+            {
+                rules = print(ttf,"Points limit: "+std::to_string(points_limit),25,sf::Color::Black,sf::Vector2f(375,430));
+            }
+
+            sf::Text text = print(ttf,"Press ENTER to continue...",30,sf::Color::Black,sf::Vector2f(100,780));
+            sf::Text text_WASD = print(ttf,"\t W\nA   S   D",25,sf::Color::White,sf::Vector2f(100,200));
+            sf::Text text_arrows = print(ttf,"\t  ^\n<    v    >",25,sf::Color::White,sf::Vector2f(100,200+300));
+
+            std::vector<sf::Text> texts={rules,text,text_WASD,text_arrows};
+
+            sf::Sprite button;
+            button.setTexture(texture_button);
+            button.setScale(0.15,0.3);
+            button.setPosition(125,200);
+
+            std::vector<sf::Sprite> intro_buttons1={button};
+
+            for(int i=0; i<3; i++)
+            {
+                sf::Sprite button;
+                button.setTexture(texture_button);
+                button.setScale(0.15,0.3);
+                button.setPosition(90+i*35,230);
+                intro_buttons1.emplace_back(button);
+            }
+
+            button.setPosition(125,500);
+            std::vector<sf::Sprite> intro_buttons2={button};
+            for(int i=0; i<3; i++)
+            {
+                sf::Sprite button;
+                button.setTexture(texture_button);
+                button.setScale(0.15,0.3);
+                button.setPosition(90+i*35,230+300);
+                intro_buttons2.emplace_back(button);
+            }
+
+            for(const auto &el:intro_buttons1)
+            {
+                window.draw(el);
+            }
+
+            for(const auto &el:intro_buttons2)
+            {
+                window.draw(el);
+            }
+
+            for(const auto &el:texts)
+            {
+                window.draw(el);
+            }
+            window.draw(*player_blue.get_striker());
+            window.draw(*player_blue.get_striker_internal());
+            window.draw(*player_red.get_striker());
+            window.draw(*player_red.get_striker_internal());
         }
 
         //MATCH
