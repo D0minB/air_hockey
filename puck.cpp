@@ -10,6 +10,8 @@ Puck::Puck(const float &r, const sf::Vector2f &position)
     : sf::CircleShape(r)
 {
     this->setPosition(position);
+    this->setFillColor(sf::Color(255,140,0));
+    this->setOrigin(this->getRadius(),this->getRadius());
 }
 
 bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)

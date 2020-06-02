@@ -2,20 +2,57 @@
 #include "striker.h"
 #include "puck.h"
 
+sf::Text print(const sf::Font &ttf,const std::string& s,const int &size, const sf::Color &color, const sf::Vector2f &position)
+{
+   std::stringstream ss;
+
+    sf::Text text(s,ttf);
+    text.setCharacterSize(size);
+    text.setFillColor(color);
+    text.setPosition(position);
+
+    return text;
+}
+
 int main() {
-    sf::RenderWindow window(sf::VideoMode(630+50, 840), "AIR HOCKEY");
+    sf::RenderWindow window(sf::VideoMode(560, 840), "AIR HOCKEY");
     window.setVerticalSyncEnabled(true); //frame limit
 
+    //TABLE
     sf::Texture texture_table;
     if (!texture_table.loadFromFile("resources/images/table.png")) {
         std::cerr << "Could not load texture of table" << std::endl;
         return 1;
     }
+    sf::Sprite sprite_table;
+    sprite_table.setTexture(texture_table);
+    sprite_table.setScale(1.75, 1.75);
 
+    //BUTTONS
     sf::Texture texture_button;
     if (!texture_button.loadFromFile("resources/images/button.png")) {
         std::cerr << "Could not load texture of button" << std::endl;
         return 1;
+    }
+
+    std::vector<sf::Sprite> end_buttons;
+    for(int i=0; i<2; i++)
+    {
+        sf::Sprite button;
+        button.setTexture(texture_button);
+        button.setScale(1,0.5);
+        button.setPosition(155,490+i*55);
+        end_buttons.emplace_back(button);
+    }
+
+    std::vector<sf::Sprite> menu_buttons;
+    for(int i=0; i<1; i++)
+    {
+        sf::Sprite button;
+        button.setTexture(texture_button);
+        button.setScale(1,0.5);
+        button.setPosition(165,450+i*55);
+        menu_buttons.emplace_back(button);
     }
 
     //SOUNDS
@@ -33,13 +70,13 @@ int main() {
         return 1;
     }
 
-    sf::Music after_match;
-    if (!after_match.openFromFile("resources/sounds/safe_and_sound.wav"))
+    sf::Music music_after_match;
+    if (!music_after_match.openFromFile("resources/sounds/safe_and_sound.wav"))
     {
         std::cerr << "Music after match not load" << std::endl;
         return 1;
     }
-    after_match.setPlayingOffset(sf::seconds(2.f));
+    music_after_match.setPlayingOffset(sf::seconds(15.f));
 
     //FONT
     sf::Font ttf;
@@ -49,56 +86,18 @@ int main() {
         return 1;
     }
 
-    std::string s("");
-    sf::Text txt(s,ttf);
-    txt.setCharacterSize(120);
-    txt.setFillColor(sf::Color::Black);
-    txt.setPosition(470,280);
-
-    sf::Text end_txt(s,ttf);
-    end_txt.setCharacterSize(45);
-    end_txt.setFillColor(sf::Color::Black);
-    end_txt.setPosition(80,160);
-
-    sf::Text button_txt(s,ttf);
-    button_txt.setCharacterSize(25);
-    button_txt.setFillColor(sf::Color::White);
-    button_txt.setPosition(205,495);
-
-    std::stringstream ss;
-
-    //TABLE
-    sf::Sprite sprite_table;
-    sprite_table.setTexture(texture_table);
-    sprite_table.setScale(1.75, 1.75);
-
-    //BUTTON
-    std::vector<sf::Sprite> end_buttons;
-
-    for(int i=0; i<2; i++)
-    {
-        sf::Sprite button;
-        button.setTexture(texture_button);
-        button.setScale(1,0.5);
-        button.setPosition(155,490+i*55);
-        end_buttons.emplace_back(button);
-    }
-
-
     //PLAYERS - constructor
     Player player_blue(280,120,sf::Color::Blue,75,365);
     Player player_red(280,710,sf::Color::Red,480,770);
 
-    //PUCK
+    //PUCK - constructor
     Puck puck(30,sf::Vector2f(280+220,425));
-    puck.setFillColor(sf::Color(255,140,0));
-    puck.setOrigin(puck.getRadius(),puck.getRadius());
 
     sf::Clock clock;
 
-
-
-    bool end_of_match = true;
+    bool menu=1;
+    bool match=0;
+    bool end_of_match = 0;
 
     while (window.isOpen())
     {
@@ -110,14 +109,21 @@ int main() {
                 window.close();
             }
 
+            if(menu)
+            {
+                sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
+
+                //BUTTON "START"
+                if(menu_buttons[0].getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
+                {
+                    menu=false;
+                    match=true;
+                }
+            }
+
             if(end_of_match)
             {
                 sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
-                //BUTTON "CLOSE"
-                if(end_buttons[1].getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
-                {
-                    window.close();
-                }
 
                 //BUTTON "NEW GAME"
                 if(end_buttons[0].getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
@@ -126,6 +132,16 @@ int main() {
                     player_blue.reset(sf::Vector2f(280,120));
                     player_red.reset(sf::Vector2f(280,710));
                     end_of_match=false;
+                    match=true;
+
+                    music_after_match.stop();
+                    music_after_match.setPlayingOffset(sf::seconds(15.f));
+                }
+
+                //BUTTON "CLOSE"
+                if(end_buttons[1].getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
+                {
+                    window.close();
                 }
             }
 
@@ -136,13 +152,24 @@ int main() {
         window.clear(sf::Color::White);
         window.draw(sprite_table);
 
-
-        if(!end_of_match)
+        //MENU
+        if(menu)
         {
-            after_match.stop();
-            after_match.setPlayingOffset(sf::seconds(15.f));
+            sf::Text title = print(ttf,"\tAIR\nHOCKEY\n\n",75,sf::Color::Black,sf::Vector2f(140,160));
+            sf::Text start_text = print(ttf,"START",25,sf::Color::White,sf::Vector2f(240,455));
 
+            for(const auto &el : menu_buttons)
+            {
+                window.draw(el);
+            }
 
+            window.draw(title);
+            window.draw(start_text);
+        }
+
+        //MATCH
+        if(match)
+        {
             //PLAYERS MOVE
             player_blue.get_striker()->set_previous_position(player_blue.get_striker()->getPosition());
             player_red.get_striker()->set_previous_position(player_red.get_striker()->getPosition());
@@ -152,10 +179,9 @@ int main() {
 
             std::vector<Striker> strikers={*player_blue.get_striker(),*player_red.get_striker()};
 
-            //RESULT
-            ss.str("");
-            ss<< player_blue.get_points() << "\n" << player_red.get_points();
-            txt.setString(ss.str());
+            //DISPLAY RESULT
+            std::string result = std::to_string(player_blue.get_points())+"\n"+std::to_string(player_red.get_points());
+            sf::Text result_text = print(ttf,result,120,sf::Color::Black,sf::Vector2f(470,280));
 
             //PUCK ANIMATE
             bool play_cling = puck.animate(elapsed,strikers);
@@ -167,10 +193,8 @@ int main() {
                 cling.setPlayingOffset(sf::seconds(0.f));
 
             }
-
             //GOAL 0-no goal, 1-player1 scores, 2-player2 scores
             int goal = puck.check_goal();
-
             if(goal==1 || goal==2)
             {
                 goal_sound.play();
@@ -191,12 +215,12 @@ int main() {
 
             if(player_blue.get_points()==7 || player_red.get_points()==7)
             {
+                match=false;
                 end_of_match=true;
-                after_match.play();
+                music_after_match.play();
             }
-
+            window.draw(result_text);
             window.draw(puck);
-            window.draw(txt);
             window.draw(*player_blue.get_striker());
             window.draw(*player_blue.get_striker_internal());
             window.draw(*player_red.get_striker());
@@ -204,33 +228,29 @@ int main() {
         }
 
         //END OF MATCH
-        else
+        if(end_of_match)
         {
-            ss.str("");
-            ss << "CONGRATULATIONS!\n\n";
+            std::string text = "CONGRATULATIONS!\n\n";
 
             if(player_blue.get_points()==7)
             {
-                ss << " BLUE PLAYER WINS\n\t\t\t   "<< player_blue.get_points() << "-" << player_red.get_points();
+                text+=" BLUE PLAYER WINS\n\t\t\t   "+std::to_string(player_blue.get_points())+"-"+std::to_string(player_red.get_points());
             }
             else
             {
-                ss << " RED PLAYER WINS\n\t\t\t   " << player_red.get_points() << "-" << player_blue.get_points();
+                text+=" RED PLAYER WINS\n\t\t\t   "+std::to_string(player_red.get_points())+"-"+std::to_string(player_blue.get_points());
             }
-            end_txt.setString(ss.str());
+            std::string buttons_string = "NEW MATCH\n\n     CLOSE";
 
-            ss.str("");
-            ss.clear();
-            ss << "NEW MATCH\n\n     CLOSE";
-            button_txt.setString(ss.str());
-
-            window.draw(end_txt);
+            sf::Text summary = print(ttf,text,45,sf::Color::Black,sf::Vector2f(80,160));
+            sf::Text buttons_text = print(ttf,buttons_string,25,sf::Color::White,sf::Vector2f(205,495));
 
             for(const auto &el : end_buttons)
             {
                 window.draw(el);
             }
-            window.draw(button_txt);
+            window.draw(summary);
+            window.draw(buttons_text);
         }
         window.display();
     }

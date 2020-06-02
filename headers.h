@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
+#include <string>
 #include <SFML/Audio.hpp>
 
 
