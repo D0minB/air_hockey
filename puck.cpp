@@ -28,24 +28,24 @@ bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)
             if(this->getPosition().x<s.getPosition().x)
             {
                // this->v_x_=-std::abs(this->v_x_);
-                this->v_x_=-std::abs(100+50*std::abs(s.getPosition().x-s.get_previous_position().x));
+                this->v_x_=-std::abs(120+70*std::abs(s.getPosition().x-s.get_previous_position().x));
             }
             if(this->getPosition().x>s.getPosition().x)
             {
                 //this->v_x_=std::abs(this->v_x_);
-                 this->v_x_=std::abs(100+50*std::abs(s.getPosition().x-s.get_previous_position().x));
+                 this->v_x_=std::abs(120+70*std::abs(s.getPosition().x-s.get_previous_position().x));
             }
             if(this->getPosition().y<s.getPosition().y)
             {
                // this->v_y_=-std::abs(this->v_y_);
-                this->v_y_=-std::abs(100+50*std::abs(s.getPosition().y-s.get_previous_position().y));
+                this->v_y_=-std::abs(120+70*std::abs(s.getPosition().y-s.get_previous_position().y));
 
                 //this->move(0,-(90-distance));
             }
             if(this->getPosition().y>s.getPosition().y)
             {
                // this->v_y_=std::abs(this->v_y_);
-                this->v_y_=std::abs(100+50*std::abs(s.getPosition().y-s.get_previous_position().y));
+                this->v_y_=std::abs(120+70*std::abs(s.getPosition().y-s.get_previous_position().y));
                 //this->move(0,90-distance);
             }
         }
