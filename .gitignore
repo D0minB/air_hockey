@@ -1,5 +1,6 @@
 debug
 release
+pro.user
 
 # C++ objects and libs
 *.slo
