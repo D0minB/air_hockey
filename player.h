@@ -1,6 +1,6 @@
 #pragma once
-#include <headers.h>
-#include <striker.h>
+#include "headers.h"
+#include "striker.h"
 
 class Player
 {
@@ -10,6 +10,7 @@ private:
     Striker *striker_internal_;
 public:
     Player(const int&,const int&, const sf::Color&,const int& up,const int& down);
+    Player();
     ~Player();
     int get_points() const;
     void add_point();

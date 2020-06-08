@@ -1,6 +1,6 @@
 #pragma once
-#include <headers.h>
-#include <striker.h>
+#include "headers.h"
+#include "striker.h"
 
 class Puck :public sf::CircleShape
 {

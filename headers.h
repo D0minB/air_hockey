@@ -6,5 +6,6 @@
 #include <cmath>
 #include <string>
 #include <SFML/Audio.hpp>
+#include <memory>
 
 

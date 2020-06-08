@@ -1,9 +1,10 @@
 TEMPLATE = app
-CONFIG += console c++11
+CONFIG += console c++17
 CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        hockeygame.cpp \
         main.cpp \
         player.cpp \
         puck.cpp \
@@ -20,6 +21,7 @@ CONFIG(debug, debug|release){
 
 HEADERS += \
     headers.h \
+    hockeygame.h \
     player.h \
     puck.h \
     striker.h

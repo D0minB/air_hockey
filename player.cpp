@@ -17,6 +17,11 @@ Player::Player(const int &pos_x,const int &pos_y,const sf::Color &c, const int &
     striker_internal_->setOrigin(striker2->getRadius(),striker2->getRadius());
 }
 
+Player::Player()
+{
+
+}
+
 Player::~Player()
 {
     delete striker_;
