@@ -7,7 +7,7 @@
 # Description
 * Air Hockey to gra zręcznościowa dla 2 graczy. Polega na odbijaniu krążka okrągłym przedmiotem, w Polsce nazywanym grzybkiem, a po angielsku striker. Celem gry jest umieszczenie krążka w bramce przeciwnika.
 
-* Jeden graczy steruje klawiszami WASD, drugi natomiast strzałkami. Informuje o tym intro przed rozgrywką. Gra kończy się po zdobyciu przez któregoś z graczy ustalonej liczby bramek lub po ustalonym czasie. W mojej wersji w ustawieniach wybieramy jedną z 4 możliwości zakończenia gry, dwie związane są z czasem, a kolejne dwie z wynikiem. Do wyboru mamy 5 lub 7 punktów, bądź 2 lub 3 minuty.
+* Jeden z graczy steruje klawiszami WASD, drugi natomiast strzałkami. Informuje o tym intro przed rozgrywką. Gra kończy się po zdobyciu przez któregoś z graczy ustalonej liczby bramek lub po ustalonym czasie. W mojej wersji w ustawieniach wybieramy jedną z 4 możliwości zakończenia gry, dwie związane są z czasem, a kolejne dwie z wynikiem. Do wyboru mamy 5 lub 7 punktów, bądź 2 lub 3 minuty.
 
 # Sources
 Sounds: 
