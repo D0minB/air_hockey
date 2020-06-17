@@ -11,18 +11,17 @@
 
 # Sources
 Sounds: 
-https://www.pacdv.com/sounds/mechanical_sounds.html
-http://freesoundeffect.net/sound/foosball-game-sound-effect
+* https://www.pacdv.com/sounds/mechanical_sounds.html
+* http://freesoundeffect.net/sound/foosball-game-sound-effect
 
-Music:
-Capital Cities - Safe and Sound:
-https://www.youtube.com/watch?v=P-u_1gNcmek
+Music - Capital Cities - Safe and Sound:
+* https://www.youtube.com/watch?v=P-u_1gNcmek
 
 Font:
-https://www.fontsquirrel.com/fonts/list/popular
-
+* https://www.fontsquirrel.com/fonts/list/popular
+ 
 Textures:
-https://opengameart.org/content/ui-buttons-and-slots
-https://www.codeproject.com/KB/mobile/432054/bariers.jpg
+* https://opengameart.org/content/ui-buttons-and-slots
+* https://www.codeproject.com/KB/mobile/432054/bariers.jpg
 
 
