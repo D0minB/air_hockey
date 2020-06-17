@@ -79,8 +79,8 @@ bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)
 
 void Puck::reset_velocity()
 {
-    v_x_=0;
-    v_y_=0;
+    this->v_x_=0;
+    this->v_y_=0;
 }
 
 int Puck::check_goal()
@@ -105,7 +105,7 @@ int Puck::check_goal()
 
 void Puck::reset(const sf::Vector2f &position)
 {
-    v_x_=-150;
-    v_y_=0;
+    this->v_x_=-150;
+    this->v_y_=0;
     this->setPosition(position);
 }

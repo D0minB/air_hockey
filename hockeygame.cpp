@@ -1,8 +1,8 @@
 #include "hockeygame.h"
 
-HockeyGame::HockeyGame(int W, int H) : window_(sf::VideoMode(W, H), "AIR HOCKEY")
+HockeyGame::HockeyGame(const int &W,const int &H) : window_(sf::VideoMode(W, H), "AIR HOCKEY")
 {
-    window_.setFramerateLimit(100);
+    window_.setFramerateLimit(200);
 
     //TABLE
     if (!texture_table_->loadFromFile("resources/images/table.png")) {
@@ -67,7 +67,6 @@ HockeyGame::HockeyGame(int W, int H) : window_(sf::VideoMode(W, H), "AIR HOCKEY"
         std::cerr << "Music after match not load" << std::endl;
     }
     music_after_match_->setPlayingOffset(sf::seconds(15.f));
-
 }
 
 std::unique_ptr<sf::Text> HockeyGame::print(const std::unique_ptr<sf::Font> &ttf, const std::string &s, const int &size, const sf::Color &color, const sf::Vector2f &position)
@@ -93,25 +92,24 @@ void HockeyGame::draw()
     elapsed_ = clock.restart();
     window_.clear(sf::Color::Black);
     window_.draw(*sprite_table_);
-    if(state_==GameState::menu)
+
+    switch(state_)
     {
+    case GameState::menu:
         this->draw_menu();
-    }
-    if(state_==GameState::intro)
-    {
+        break;
+    case GameState::intro:
         this->draw_intro();
-    }
-    if(state_==GameState::settings)
-    {
-        this->draw_settings();
-    }
-    if(state_==GameState::match)
-    {
+        break;
+    case GameState::match:
         this->draw_match();
-    }
-    if(state_==GameState::after_match)
-    {
+        break;
+    case GameState::settings:
+        this->draw_settings();
+        break;
+    case GameState::after_match:
         this->draw_after_match();
+        break;
     }
     window_.display();
 }
@@ -120,16 +118,16 @@ void HockeyGame::draw_after_match()
 {
     std::string text = "CONGRATULATIONS!\n\n";
 
-    if(player_blue_->get_points()==points_limit && points_limit>0)
+    if(player_blue_->get_points()==points_limit_ && points_limit_>0)
     {
         text+=" BLUE PLAYER WINS\n\t\t\t   "+std::to_string(player_blue_->get_points())+"-"+std::to_string(player_red_->get_points());
     }
-    else if(player_red_->get_points()==points_limit && points_limit>0)
+    else if(player_red_->get_points()==points_limit_ && points_limit_>0)
     {
         text+=" RED PLAYER WINS\n\t\t\t   "+std::to_string(player_red_->get_points())+"-"+std::to_string(player_blue_->get_points());
     }
 
-    if(time_limit>0)
+    if(time_limit_>0)
     {
         if(player_blue_->get_points() > player_red_->get_points())
         {
@@ -160,22 +158,20 @@ void HockeyGame::draw_after_match()
 
 void HockeyGame::draw_match()
 {
-    ms+=elapsed_.asMilliseconds();
+    ms_+=elapsed_.asMilliseconds();
 
-    if(ms>=1000 && !(remained_min==0 && remained_sec==0))
+    if(ms_>=1000 && !(remained_min_==0 && remained_sec_==0))
     {
-        ms=0;
-
-        if(remained_sec==0)
+        ms_=0;
+        if(remained_sec_==0)
         {
-            remained_min-=1;
-            remained_sec=59;
+            remained_min_-=1;
+            remained_sec_=59;
         }
         else
         {
-            remained_sec-=1;
+            remained_sec_-=1;
         }
-
     }
 
     //PLAYERS MOVE
@@ -191,15 +187,14 @@ void HockeyGame::draw_match()
     std::string result = std::to_string(player_blue_->get_points())+"\n"+std::to_string(player_red_->get_points());
     std::unique_ptr<sf::Text> result_text = print(ttf,result,120,sf::Color::Black,sf::Vector2f(470,280));
 
-    if(time_limit>0)
+    if(time_limit_>0)
     {
-        std::string time_string = std::to_string(remained_min)+":";
-
-        if(remained_sec<10)
+        std::string time_string = std::to_string(remained_min_)+":";
+        if(remained_sec_<10)
         {
             time_string+="0";
         }
-        time_string+=std::to_string(remained_sec);
+        time_string+=std::to_string(remained_sec_);
         std::unique_ptr<sf::Text> remained_time = print(ttf,time_string,40,sf::Color::Black,sf::Vector2f(25,375));
         window_.draw(*remained_time);
     }
@@ -234,8 +229,8 @@ void HockeyGame::draw_match()
         }
     }
 
-    if(((player_blue_->get_points()==points_limit || player_red_->get_points()==points_limit) && points_limit>0)
-            || (time_limit>0 && remained_min==0 && remained_sec==0))
+    if(((player_blue_->get_points()==points_limit_ || player_red_->get_points()==points_limit_) && points_limit_>0)
+            || (time_limit_>0 && remained_min_==0 && remained_sec_==0))
     {
         state_=GameState::after_match;
         music_after_match_->play();
@@ -264,14 +259,14 @@ void HockeyGame::draw_menu()
 void HockeyGame::draw_intro()
 {
     std::unique_ptr<sf::Text> limit;
-    if(points_limit>0)
+    if(points_limit_>0)
     {
-        limit = print(ttf,"Points limit: "+std::to_string(points_limit),25,sf::Color::Black,sf::Vector2f(375,430));
+        limit = print(ttf,"Points limit: "+std::to_string(points_limit_),25,sf::Color::Black,sf::Vector2f(375,430));
     }
 
-    else if(time_limit>0)
+    else if(time_limit_>0)
     {
-        limit = print(ttf,"Time limit: "+std::to_string(time_limit)+" min",25,sf::Color::Black,sf::Vector2f(25,380));
+        limit = print(ttf,"Time limit: "+std::to_string(time_limit_)+" min",25,sf::Color::Black,sf::Vector2f(25,380));
     }
     std::vector<std::unique_ptr<sf::Sprite>> intro_buttons;
 
@@ -321,19 +316,19 @@ void HockeyGame::draw_settings()
     std::unique_ptr<sf::Text> text_3min=print(ttf,"3 minutes",25,sf::Color::White,sf::Vector2f(395,320));
     std::unique_ptr<sf::Text> text_ok=print(ttf,"OK",25,sf::Color::White,sf::Vector2f(270,655));
 
-    if(points_limit==5)
+    if(points_limit_==5)
     {
         text_5->setFillColor(sf::Color::Yellow);
     }
-    else if(points_limit==7)
+    else if(points_limit_==7)
     {
         text_7->setFillColor(sf::Color::Yellow);
     }
-    else if(time_limit==2)
+    else if(time_limit_==2)
     {
         text_2min->setFillColor(sf::Color::Yellow);
     }
-    else if(time_limit==3)
+    else if(time_limit_==3)
     {
         text_3min->setFillColor(sf::Color::Yellow);
     }
@@ -363,25 +358,30 @@ void HockeyGame::loop()
 
         sf::Event event;
         window_.pollEvent(event);
-        // while (window_.pollEvent(event))
-        // {
+
         if (event.type == sf::Event::Closed)
         {
             window_.close();
         }
-        sf::Vector2i mouse_position = sf::Mouse::getPosition(window_);
+
+        if (event.type == sf::Event::Resized)
+        {
+            window_.setSize(sf::Vector2u(560,840));
+        }
+
+        sf::Vector2i mouse_pos = sf::Mouse::getPosition(window_);
         if(state_==GameState::menu)
         {
             //BUTTON "START"
-            if(menu_buttons_[0]->getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
+            if(menu_buttons_[0]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y) && event.mouseButton.button == sf::Mouse::Left)
             {
                 state_=GameState::intro;
-                remained_min=time_limit;
-                remained_sec=0;
+                remained_min_=time_limit_;
+                remained_sec_=0;
             }
 
             //BUTTON "SETTINGS"
-            if(menu_buttons_[1]->getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
+            if(menu_buttons_[1]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y) && event.mouseButton.button == sf::Mouse::Left)
             {
                 state_=GameState::settings;
             }
@@ -389,31 +389,31 @@ void HockeyGame::loop()
         if(state_==GameState::settings)
         {
             //BUTTON "5 points"
-            if(settings_buttons_[0]->getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
+            if(settings_buttons_[0]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y) && event.mouseButton.button == sf::Mouse::Left)
             {
-                points_limit=5;
-                time_limit=0;
+                points_limit_=5;
+                time_limit_=0;
             }
             //BUTTON "2 minutes"
-            else if(settings_buttons_[1]->getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
+            else if(settings_buttons_[1]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y) && event.mouseButton.button == sf::Mouse::Left)
             {
-                time_limit=2;
-                points_limit=0;
+                time_limit_=2;
+                points_limit_=0;
             }
             //BUTTON "7 points"
-            else if(settings_buttons_[2]->getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
+            else if(settings_buttons_[2]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y) && event.mouseButton.button == sf::Mouse::Left)
             {
-                points_limit=7;
-                time_limit=0;
+                points_limit_=7;
+                time_limit_=0;
             }
             //BUTTON "3 minutes"
-            else if(settings_buttons_[3]->getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
+            else if(settings_buttons_[3]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y) && event.mouseButton.button == sf::Mouse::Left)
             {
-                time_limit=3;
-                points_limit=0;
+                time_limit_=3;
+                points_limit_=0;
             }
             //BUTTON "OK"
-            else if(settings_buttons_[4]->getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
+            else if(settings_buttons_[4]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y) && event.mouseButton.button == sf::Mouse::Left)
             {
                 state_=GameState::menu;
             }
@@ -425,22 +425,22 @@ void HockeyGame::loop()
         if(state_==GameState::after_match)
         {
             //BUTTON "NEW GAME"
-            if(end_buttons_[0]->getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
+            if(end_buttons_[0]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y) && event.mouseButton.button == sf::Mouse::Left)
             {
                 puck_->reset(sf::Vector2f(280+220,425));
                 player_blue_->reset(sf::Vector2f(280,120));
                 player_red_->reset(sf::Vector2f(280,710));
                 state_=GameState::match;
 
-                remained_min=time_limit;
-                remained_sec=0;
+                remained_min_=time_limit_;
+                remained_sec_=0;
 
                 music_after_match_->stop();
                 music_after_match_->setPlayingOffset(sf::seconds(15.f));
             }
 
             //BUTTON "CLOSE"
-            if(end_buttons_[1]->getGlobalBounds().contains(mouse_position.x,mouse_position.y) && event.mouseButton.button == sf::Mouse::Left)
+            if(end_buttons_[1]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y) && event.mouseButton.button == sf::Mouse::Left)
             {
                 window_.close();
             }

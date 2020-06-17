@@ -37,16 +37,15 @@ private:
     GameState state_=GameState::menu;
 
     //settings
-    int points_limit=7;
-    int time_limit=0; // in minutes
-    int ms=0;
-    int remained_min=time_limit;
-    int remained_sec=0;
+    int points_limit_=7;
+    int time_limit_=0; // in minutes
+    int ms_=0;
+    int remained_min_=time_limit_;
+    int remained_sec_=0;
 
 public:
-    HockeyGame(int W, int H);
+    HockeyGame(const int &W,const int &H);
     std::unique_ptr<sf::Text> print(const std::unique_ptr<sf::Font> &ttf,const std::string& s,const int &size, const sf::Color &color, const sf::Vector2f &position);
-
     std::unique_ptr<sf::Sprite> add_button(const std::unique_ptr<sf::Texture> &texture_button, const sf::Vector2f &position, const sf::Vector2f &scale);
     void draw();
     void draw_menu();
@@ -54,8 +53,6 @@ public:
     void draw_intro();
     void draw_after_match();
     void draw_match();
-
     void loop();
-
 };
 
