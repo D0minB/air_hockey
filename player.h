@@ -1,5 +1,4 @@
 #pragma once
-#include "headers.h"
 #include "striker.h"
 
 class Player

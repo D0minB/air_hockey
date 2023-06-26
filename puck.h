@@ -1,5 +1,4 @@
 #pragma once
-#include "headers.h"
 #include "striker.h"
 
 class Puck :public sf::CircleShape
@@ -13,7 +12,6 @@ public:
     Puck();
     Puck(const float &r, const sf::Vector2f &position);
     bool animate(const sf::Time &elapsed, std::vector<Striker> &strikers);
-    void reset_velocity();
     int check_goal();
     void reset(const sf::Vector2f &position);
 };

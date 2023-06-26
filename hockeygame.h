@@ -1,5 +1,4 @@
 #pragma once
-#include "headers.h"
 #include "player.h"
 #include "puck.h"
 

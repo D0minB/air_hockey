@@ -77,26 +77,19 @@ bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)
     return play_sound;
 }
 
-void Puck::reset_velocity()
-{
-    this->v_x_=0;
-    this->v_y_=0;
-}
 
 int Puck::check_goal()
 {
-    if(this->getPosition().x>180 && this->getPosition().x<390)
+    if(this->getPosition().x > 180 && this->getPosition().x < 390)
     {
-        if(this->getPosition().y>785)
+        if(this->getPosition().y > 785)
         {
-            this->setPosition(sf::Vector2f(280,425+100));
-            this->reset_velocity();
+            this->reset(sf::Vector2f(280,425+100));
             return 1;
         }
-        else if(this->getPosition().y<55)
+        else if(this->getPosition().y < 55)
         {
-            this->setPosition(sf::Vector2f(280,425-100));
-            this->reset_velocity();
+            this->reset(sf::Vector2f(280,425-100));
             return 2;
         }
     }
@@ -105,7 +98,7 @@ int Puck::check_goal()
 
 void Puck::reset(const sf::Vector2f &position)
 {
-    this->v_x_=-150;
-    this->v_y_=0;
+    this->v_x_ = -150;
+    this->v_y_ = 0;
     this->setPosition(position);
 }
