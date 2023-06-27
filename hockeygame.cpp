@@ -201,8 +201,8 @@ void HockeyGame::draw_match()
         cling_->setPlayingOffset(sf::seconds(0.f));
     }
     //GOAL 0-no goal, 1-player1 scores, 2-player2 scores
-    int goal = puck_->check_goal();
-    if(goal==1 || goal==2)
+    IsGoal goal_info = puck_->check_goal();
+    if(goal_info != NO_GOAL)
     {
         goal_sound_->play();
         goal_sound_->setPlayingOffset(sf::seconds(0.f));
@@ -210,11 +210,11 @@ void HockeyGame::draw_match()
         player_blue_->get_striker()->setPosition(280,120);
         player_red_->get_striker()->setPosition(280,710);
 
-        if(goal==1)
+        if(goal_info == BLUE_GOAL)
         {
             player_blue_->add_point();
         }
-        if(goal==2)
+        if(goal_info == RED_GOAL)
         {
             player_red_->add_point();
         }

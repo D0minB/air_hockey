@@ -9,7 +9,7 @@ Puck::Puck()
 Puck::Puck(const float &r, const sf::Vector2f &position)
     : sf::CircleShape(r){
     this->setPosition(position);
-    this->setFillColor(sf::Color(255,140,0));
+    this->setFillColor(this->color_);
     this->setOrigin(this->getRadius(),this->getRadius());
 }
 
@@ -23,10 +23,8 @@ bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)
     {
         sf::FloatRect striker_bounds = s.getGlobalBounds();
 
-        float dx = s.getPosition().x - s.get_previous_position().x;
-        float dy = s.getPosition().y - s.get_previous_position().y;
-        float abs_dx = std::abs(dx);
-        float abs_dy = std::abs(dy);
+        float abs_dx = std::abs(s.getPosition().x - s.get_previous_position().x);
+        float abs_dy = std::abs(s.getPosition().y - s.get_previous_position().y);
 
         const int v0 = 80;
         const int v1 = 100;
@@ -56,7 +54,7 @@ bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)
 }
 
 
-int Puck::check_goal()
+IsGoal Puck::check_goal()
 {
     const int MIN_GOAL = 180;
     const int MAX_GOAL = 390;
@@ -65,16 +63,16 @@ int Puck::check_goal()
     {
         if(this->getPosition().y > this->down_limit_)
         {
-            this->reset(sf::Vector2f(280,425+100));
-            return 1;
+            this->reset(sf::Vector2f((MIN_GOAL+MAX_GOAL) / 2,(this->up_limit_ + this->down_limit_)/2 + 100));
+            return BLUE_GOAL;
         }
         else if(this->getPosition().y < this->up_limit_)
         {
-            this->reset(sf::Vector2f(280,425-100));
-            return 2;
+            this->reset(sf::Vector2f((MIN_GOAL+MAX_GOAL) / 2,(this->up_limit_ + this->down_limit_)/2 - 100));
+            return RED_GOAL;
         }
     }
-    return 0;
+    return NO_GOAL;
 }
 
 void Puck::reset(const sf::Vector2f &position)
