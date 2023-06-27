@@ -199,7 +199,6 @@ void HockeyGame::draw_match()
     {
         cling_->play();
         cling_->setPlayingOffset(sf::seconds(0.f));
-
     }
     //GOAL 0-no goal, 1-player1 scores, 2-player2 scores
     int goal = puck_->check_goal();

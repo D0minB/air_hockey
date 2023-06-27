@@ -8,6 +8,8 @@ private:
     int v_y_ = 0;
     const int up_limit_ = 55;
     const int down_limit_ = 785;
+    const int left_limit_ = 18;
+    const int right_limit_ = 540;
 public:
     Puck();
     Puck(const float &r, const sf::Vector2f &position);
