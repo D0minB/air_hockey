@@ -12,7 +12,7 @@ Striker::Striker (const int &r, const sf::Vector2f &position,const int& v_x,cons
 }
 void Striker::animate(const sf::Time &elapsed, const bool& arrows, const sf::Vector2f &puck_position)
 {
-    sf::FloatRect strike_bounds=this->getGlobalBounds();
+    sf::FloatRect strike_bounds = this->getGlobalBounds();
 
     sf::Keyboard::Key keys[4];
     if (arrows)
@@ -30,26 +30,26 @@ void Striker::animate(const sf::Time &elapsed, const bool& arrows, const sf::Vec
         keys[3] = sf::Keyboard::D;
     }
 
-    if(sf::Keyboard::isKeyPressed(keys[0]) && getPosition().y>up_limit_
-        && !strike_bounds.contains(puck_position.x,puck_position.y+25))
-        this->move(0,-std::abs(v_y_*elapsed.asSeconds()));
+    if(sf::Keyboard::isKeyPressed(keys[0]) && getPosition().y > up_limit_
+        && !strike_bounds.contains(puck_position.x, puck_position.y + 25))
+        this->move(0, -std::abs(v_y_ * elapsed.asSeconds()));
 
     if(sf::Keyboard::isKeyPressed(keys[1]) && getPosition().y<down_limit_
-        && !strike_bounds.contains(puck_position.x,puck_position.y-25))
-        this->move(0,std::abs(v_y_*elapsed.asSeconds()));
+        && !strike_bounds.contains(puck_position.x, puck_position.y - 25))
+        this->move(0, std::abs(v_y_ * elapsed.asSeconds()));
 
-    if(sf::Keyboard::isKeyPressed(keys[2]) && this->getPosition().x>25+this->getRadius()
-        && !strike_bounds.contains(puck_position.x+25,puck_position.y) )
-        this->move(-std::abs(v_x_*elapsed.asSeconds()),0);
+    if(sf::Keyboard::isKeyPressed(keys[2]) && this->getPosition().x > 25 + this->getRadius()
+        && !strike_bounds.contains(puck_position.x + 25, puck_position.y))
+        this->move(-std::abs(v_x_ * elapsed.asSeconds()), 0);
 
-    if(sf::Keyboard::isKeyPressed(keys[3]) && getPosition().x<535-this->getRadius()
-        && !strike_bounds.contains(puck_position.x-25,puck_position.y) )
-        this->move(std::abs(v_x_*elapsed.asSeconds()),0);
+    if(sf::Keyboard::isKeyPressed(keys[3]) && getPosition().x < 535-this->getRadius()
+        && !strike_bounds.contains(puck_position.x - 25 ,puck_position.y))
+        this->move(std::abs(v_x_ * elapsed.asSeconds()), 0);
 }
 
 void Striker::set_previous_position(const sf::Vector2f &p)
 {
-    previous_position_=p;
+    previous_position_ = p;
 }
 
 sf::Vector2f Striker::get_previous_position()
