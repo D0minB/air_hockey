@@ -4,8 +4,8 @@
 class Striker :public sf::CircleShape
 {
 protected:
-    int v_x_;
-    int v_y_;
+    int v_x_ = 400;
+    int v_y_ = 400;
     int up_limit_;
     int down_limit_;
     sf::Vector2f previous_position_;
