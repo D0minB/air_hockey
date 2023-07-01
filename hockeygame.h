@@ -44,7 +44,7 @@ private:
 
 public:
     HockeyGame(const int &W,const int &H);
-    std::unique_ptr<sf::Text> print_text(const std::unique_ptr<sf::Font> &ttf,const std::string& s,const int &size, const sf::Color &color, const sf::Vector2f &position);
+    sf::Text print_text(const std::unique_ptr<sf::Font> &ttf,const std::string& s,const int &size, const sf::Color &color, const sf::Vector2f &position);
     std::unique_ptr<sf::Sprite> add_button(const std::unique_ptr<sf::Texture> &texture_button, const sf::Vector2f &position, const sf::Vector2f &scale);
     void draw();
     void draw_menu();

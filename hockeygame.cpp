@@ -58,12 +58,12 @@ HockeyGame::HockeyGame(const int &W,const int &H) : window_(sf::VideoMode(W, H),
     music_after_match_->setPlayingOffset(sf::seconds(15.f));
 }
 
-std::unique_ptr<sf::Text> HockeyGame::print_text(const std::unique_ptr<sf::Font> &ttf, const std::string &txt, const int &size, const sf::Color &color, const sf::Vector2f &position)
+sf::Text HockeyGame::print_text(const std::unique_ptr<sf::Font> &ttf, const std::string &txt, const int &size, const sf::Color &color, const sf::Vector2f &position)
 {
-    std::unique_ptr<sf::Text> text = std::make_unique<sf::Text>(txt,*ttf);
-    text->setCharacterSize(size);
-    text->setFillColor(color);
-    text->setPosition(position);
+    sf::Text text = sf::Text(txt,*ttf);
+    text.setCharacterSize(size);
+    text.setFillColor(color);
+    text.setPosition(position);
     return text;
 }
 
@@ -123,17 +123,17 @@ void HockeyGame::draw_after_match()
     else
         ss << " DRAW\t\t\t   " << bluePoints << "-" << redPoints;
 
-    std::unique_ptr<sf::Text> summary = print_text(ttf, ss.str(), 45, sf::Color::Black, sf::Vector2f(80,160));
+    sf::Text summary = print_text(ttf, ss.str(), 45, sf::Color::Black, sf::Vector2f(80,160));
 
     std::string buttons_string = "NEW MATCH\n\n     CLOSE";
-    std::unique_ptr<sf::Text> buttons_text = print_text(ttf,buttons_string, 25, sf::Color::White, sf::Vector2f(205,495));
+    sf::Text buttons_text = print_text(ttf,buttons_string, 25, sf::Color::White, sf::Vector2f(205,495));
 
     for(const auto &el : end_buttons_)
     {
         window_.draw(*el);
     }
-    window_.draw(*summary);
-    window_.draw(*buttons_text);
+    window_.draw(summary);
+    window_.draw(buttons_text);
 }
 
 void HockeyGame::draw_match()
@@ -163,13 +163,13 @@ void HockeyGame::draw_match()
 
     //DISPLAY RESULT
     std::string result = std::to_string(player_blue_->get_points())+"\n"+std::to_string(player_red_->get_points());
-    std::unique_ptr<sf::Text> result_text = print_text(ttf,result,120,sf::Color::Black,sf::Vector2f(470,280));
+    sf::Text result_text = print_text(ttf,result,120,sf::Color::Black,sf::Vector2f(470,280));
 
     if(time_limit_ > 0)
     {
         std::string time_string = std::to_string(remained_min_) + ":" + (remained_sec_ < 10 ? "0" : "") + std::to_string(remained_sec_);
-        std::unique_ptr<sf::Text> remained_time = print_text(ttf,time_string,40,sf::Color::Black,sf::Vector2f(25,375));
-        window_.draw(*remained_time);
+        sf::Text remained_time = print_text(ttf,time_string,40,sf::Color::Black,sf::Vector2f(25,375));
+        window_.draw(remained_time);
     }
 
     //PUCK ANIMATE
@@ -204,7 +204,7 @@ void HockeyGame::draw_match()
         music_after_match_->play();
     }
 
-    window_.draw(*result_text);
+    window_.draw(result_text);
     window_.draw(*puck_);
     window_.draw(*player_blue_->get_striker());
     window_.draw(*player_blue_->get_striker_internal());
@@ -215,24 +215,28 @@ void HockeyGame::draw_match()
 
 void HockeyGame::draw_menu()
 {
-    std::unique_ptr<sf::Text> title = print_text(ttf,"\tAIR\nHOCKEY\n\n",75,sf::Color::Black,sf::Vector2f(140,160));
-    std::unique_ptr<sf::Text> buttons_text= print_text(ttf,"\tSTART\n\nSETTINGS",25,sf::Color::White,sf::Vector2f(220,455));
+    sf::Text title = print_text(ttf,"\tAIR\nHOCKEY\n\n",75,sf::Color::Black,sf::Vector2f(140,160));
+    sf::Text buttons_text= print_text(ttf,"\tSTART\n\nSETTINGS",25,sf::Color::White,sf::Vector2f(220,455));
 
     for(const auto &el : menu_buttons_)
     {
         window_.draw(*el);
     }
-    window_.draw(*title);
-    window_.draw(*buttons_text);
+    window_.draw(title);
+    window_.draw(buttons_text);
 }
 
 void HockeyGame::draw_intro()
 {
-    std::unique_ptr<sf::Text> limit;
-    if(points_limit_>0)
-        limit = print_text(ttf,"Points limit: "+std::to_string(points_limit_),25,sf::Color::Black,sf::Vector2f(375,430));
-    else if(time_limit_>0)
-        limit = print_text(ttf,"Time limit: "+std::to_string(time_limit_)+" min",25,sf::Color::Black,sf::Vector2f(25,380));
+    sf::Text limit;
+    sf::Text text;
+    sf::Text text_WASD;
+    sf::Text text_arrows;
+
+    if(points_limit_ > 0) //POINTS LIMIT
+        limit = print_text(ttf, "Points limit: " + std::to_string(points_limit_), 25, sf::Color::Black, sf::Vector2f(375,430));
+    else //TIME LIMIT
+        limit = print_text(ttf, "Time limit: " + std::to_string(time_limit_) + " min", 25, sf::Color::Black, sf::Vector2f(25,380));
 
     std::vector<std::unique_ptr<sf::Sprite>> intro_buttons;
 
@@ -241,73 +245,63 @@ void HockeyGame::draw_intro()
 
     for(int i=0; i<3; i++)
     {
-        button = add_button(texture_button_,sf::Vector2f(90+i*35,230),sf::Vector2f(0.15,0.3));
-        intro_buttons.emplace_back(std::move(button));
+        intro_buttons.emplace_back(add_button(texture_button_,sf::Vector2f(90+i*35,230),sf::Vector2f(0.15,0.3)));
     }
-
-    button = add_button(texture_button_,sf::Vector2f(125,500),sf::Vector2f(0.15,0.3));
-    intro_buttons.emplace_back(std::move(button));
+    intro_buttons.emplace_back(add_button(texture_button_,sf::Vector2f(125,500),sf::Vector2f(0.15,0.3)));
 
     for(int i=0; i<3; i++)
     {
-        button = add_button(texture_button_,sf::Vector2f(90+i*35,530),sf::Vector2f(0.15,0.3));
-        intro_buttons.emplace_back(std::move(button));
+        intro_buttons.emplace_back(add_button(texture_button_,sf::Vector2f(90+i*35,530),sf::Vector2f(0.15,0.3)));
     }
 
-    std::unique_ptr<sf::Text> text = print_text(ttf,"Press ENTER to continue...",30,sf::Color::Black,sf::Vector2f(100,780));
-    std::unique_ptr<sf::Text> text_WASD = print_text(ttf,"\t W\nA   S   D",25,sf::Color::White,sf::Vector2f(100,200));
-    std::unique_ptr<sf::Text> text_arrows = print_text(ttf,"\t  ^\n<    v    >",25,sf::Color::White,sf::Vector2f(100,200+300));
+    text = print_text(ttf, "Press ENTER to continue...", 30, sf::Color::Black, sf::Vector2f(100,780));
+    text_WASD = print_text(ttf, "\t W\nA   S   D", 25, sf::Color::White, sf::Vector2f(100,200));
+    text_arrows = print_text(ttf, "\t  ^\n<    v    >", 25, sf::Color::White, sf::Vector2f(100,200+300));
 
     for(const auto &el:intro_buttons)
     {
         window_.draw(*el);
     }
 
-    window_.draw(*limit);
-    window_.draw(*text);
-    window_.draw(*text_WASD);
-    window_.draw(*text_arrows);
+    window_.draw(limit);
+    window_.draw(text);
+    window_.draw(text_WASD);
+    window_.draw(text_arrows);
     window_.draw(*player_red_->get_striker());
     window_.draw(*player_red_->get_striker_internal());
     window_.draw(*player_blue_->get_striker());
     window_.draw(*player_blue_->get_striker_internal());
+
 }
 
 void HockeyGame::draw_settings()
 {
-    std::unique_ptr<sf::Text> text = print_text(ttf,"Game\nlimit:",30,sf::Color::Black,sf::Vector2f(50,265));
-    std::unique_ptr<sf::Text> text_5 = print_text(ttf,"5 points",25,sf::Color::White,sf::Vector2f(250,270));
-    std::unique_ptr<sf::Text> text_7=print_text(ttf,"7 points",25,sf::Color::White,sf::Vector2f(405,270));
-    std::unique_ptr<sf::Text> text_2min=print_text(ttf,"2 minutes",25,sf::Color::White,sf::Vector2f(240,320));
-    std::unique_ptr<sf::Text> text_3min=print_text(ttf,"3 minutes",25,sf::Color::White,sf::Vector2f(395,320));
-    std::unique_ptr<sf::Text> text_ok=print_text(ttf,"OK",25,sf::Color::White,sf::Vector2f(270,655));
+    sf::Text text = print_text(ttf,"Game\nlimit:",30,sf::Color::Black,sf::Vector2f(50,265));
+    sf::Text text_5 = print_text(ttf,"5 points",25,sf::Color::White,sf::Vector2f(250,270));
+    sf::Text text_7 = print_text(ttf,"7 points",25,sf::Color::White,sf::Vector2f(405,270));
+    sf::Text text_2min = print_text(ttf,"2 minutes",25,sf::Color::White,sf::Vector2f(240,320));
+    sf::Text text_3min = print_text(ttf,"3 minutes",25,sf::Color::White,sf::Vector2f(395,320));
+    sf::Text text_ok = print_text(ttf,"OK",25,sf::Color::White,sf::Vector2f(270,655));
 
     if(points_limit_==5)
-        text_5->setFillColor(sf::Color::Yellow);
+        text_5.setFillColor(sf::Color::Yellow);
     else if(points_limit_==7)
-        text_7->setFillColor(sf::Color::Yellow);
+        text_7.setFillColor(sf::Color::Yellow);
     else if(time_limit_==2)
-        text_2min->setFillColor(sf::Color::Yellow);
+        text_2min.setFillColor(sf::Color::Yellow);
     else if(time_limit_==3)
-        text_3min->setFillColor(sf::Color::Yellow);
-
-    std::vector<std::unique_ptr<sf::Text>> buttons_text;
-    buttons_text.emplace_back(std::move(text));
-    buttons_text.emplace_back(std::move(text_5));
-    buttons_text.emplace_back(std::move(text_7));
-    buttons_text.emplace_back(std::move(text_2min));
-    buttons_text.emplace_back(std::move(text_3min));
-    buttons_text.emplace_back(std::move(text_ok));
+        text_3min.setFillColor(sf::Color::Yellow);
 
     for(const auto &el : settings_buttons_)
     {
         window_.draw(*el);
     }
-
-    for(const auto &el : buttons_text)
-    {
-        window_.draw(*el);
-    }
+    window_.draw(text);
+    window_.draw(text_5);
+    window_.draw(text_7);
+    window_.draw(text_2min);
+    window_.draw(text_3min);
+    window_.draw(text_ok);
 }
 
 void HockeyGame::loop()

@@ -4,7 +4,7 @@
 class Player
 {
 private:
-    int points_ = 6;
+    int points_ = 0;
     Striker *striker_;
     Striker *striker_internal_;
 public:
