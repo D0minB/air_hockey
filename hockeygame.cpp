@@ -58,9 +58,9 @@ HockeyGame::HockeyGame(const int &W,const int &H) : window_(sf::VideoMode(W, H),
     music_after_match_->setPlayingOffset(sf::seconds(15.f));
 }
 
-std::unique_ptr<sf::Text> HockeyGame::print_text(const std::unique_ptr<sf::Font> &ttf, const std::string &s, const int &size, const sf::Color &color, const sf::Vector2f &position)
+std::unique_ptr<sf::Text> HockeyGame::print_text(const std::unique_ptr<sf::Font> &ttf, const std::string &txt, const int &size, const sf::Color &color, const sf::Vector2f &position)
 {
-    std::unique_ptr<sf::Text> text = std::make_unique<sf::Text>(s,*ttf);
+    std::unique_ptr<sf::Text> text = std::make_unique<sf::Text>(txt,*ttf);
     text->setCharacterSize(size);
     text->setFillColor(color);
     text->setPosition(position);
@@ -81,7 +81,7 @@ void HockeyGame::draw()
     elapsed_ = clock.restart();
 
     if(elapsed_.asMilliseconds() > 20)
-        std::cout << "Overall: " << elapsed_.asMilliseconds() << std::endl;
+        std::cout << "Frame time: " << elapsed_.asMilliseconds() << " ms" << std::endl;
 
     window_.clear();
     window_.draw(*sprite_table_);
@@ -110,27 +110,23 @@ void HockeyGame::draw()
 
 void HockeyGame::draw_after_match()
 {
-    std::string text = "CONGRATULATIONS!\n\n";
+    int bluePoints = player_blue_->get_points();
+    int redPoints = player_red_->get_points();
 
-    if(player_blue_->get_points()==points_limit_ && points_limit_>0)
-        text+=" BLUE PLAYER WINS\n\t\t\t   "+std::to_string(player_blue_->get_points())+"-"+std::to_string(player_red_->get_points());
-    else if(player_red_->get_points()==points_limit_ && points_limit_>0)
-        text+=" RED PLAYER WINS\n\t\t\t   "+std::to_string(player_red_->get_points())+"-"+std::to_string(player_blue_->get_points());
+    std::stringstream ss;
+    ss << "CONGRATULATIONS!\n\n";
 
-    if(time_limit_>0)
-    {
-        if(player_blue_->get_points() > player_red_->get_points())
-            text+=" BLUE PLAYER WINS\n\t\t\t   "+std::to_string(player_blue_->get_points())+"-"+std::to_string(player_red_->get_points());
-        else if(player_blue_->get_points() < player_red_->get_points())
-            text+=" RED PLAYER WINS\n\t\t\t   "+std::to_string(player_red_->get_points())+"-"+std::to_string(player_blue_->get_points());
-        else
-            text+=" DRAW\t\t\t   "+std::to_string(player_red_->get_points())+"-"+std::to_string(player_blue_->get_points());
-    }
+    if (bluePoints > redPoints)
+        ss << " BLUE PLAYER WINS\n\t\t\t   " << bluePoints << "-" << redPoints;
+    else if (bluePoints < redPoints)
+        ss << " RED PLAYER WINS\n\t\t\t   " << redPoints << "-" << bluePoints;
+    else
+        ss << " DRAW\t\t\t   " << bluePoints << "-" << redPoints;
+
+    std::unique_ptr<sf::Text> summary = print_text(ttf, ss.str(), 45, sf::Color::Black, sf::Vector2f(80,160));
 
     std::string buttons_string = "NEW MATCH\n\n     CLOSE";
-
-    std::unique_ptr<sf::Text> summary = print_text(ttf,text,45,sf::Color::Black,sf::Vector2f(80,160));
-    std::unique_ptr<sf::Text> buttons_text = print_text(ttf,buttons_string,25,sf::Color::White,sf::Vector2f(205,495));
+    std::unique_ptr<sf::Text> buttons_text = print_text(ttf,buttons_string, 25, sf::Color::White, sf::Vector2f(205,495));
 
     for(const auto &el : end_buttons_)
     {
@@ -160,8 +156,8 @@ void HockeyGame::draw_match()
     player_blue_->get_striker()->set_previous_position(player_blue_->get_striker()->getPosition());
     player_red_->get_striker()->set_previous_position(player_red_->get_striker()->getPosition());
 
-    player_blue_->Player_animate(elapsed_,0,puck_->getPosition());
-    player_red_->Player_animate(elapsed_,1,puck_->getPosition());
+    player_blue_->animate(elapsed_,0,puck_->getPosition());
+    player_red_->animate(elapsed_,1,puck_->getPosition());
 
     std::vector<Striker> strikers={*player_blue_->get_striker(),*player_red_->get_striker()};
 

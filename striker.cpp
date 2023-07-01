@@ -1,12 +1,7 @@
 #include "striker.h"
 
-Striker::Striker()
-{
-
-}
-
-Striker::Striker (const int &r, const sf::Vector2f &position,const int& v_x,const int& v_y, const int&up,const int&down)
-    : sf::CircleShape(r), v_x_(v_x),v_y_(v_y),up_limit_(up),down_limit_(down)
+Striker::Striker (const int &r, const sf::Vector2f &position, const int &up,const int &down)
+    : sf::CircleShape(r), up_limit_(up), down_limit_(down)
 {
     setPosition(position);
 }

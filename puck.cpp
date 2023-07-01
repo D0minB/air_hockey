@@ -1,11 +1,6 @@
 #include "puck.h"
 #include <vector>
 
-Puck::Puck()
-{
-
-}
-
 Puck::Puck(const float &r, const sf::Vector2f &position)
     : sf::CircleShape(r){
     this->setPosition(position);
