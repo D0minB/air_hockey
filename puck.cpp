@@ -40,15 +40,15 @@ bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)
     if(this->getPosition().y<up_limit_ || this->getPosition().y>down_limit_)
     {
         v_y_ = -v_y_;
-        play_sound=true;
+        play_sound = true;
     }
     if(this->getPosition().x < this->left_limit_ + this->getRadius() || this->getPosition().x > this->right_limit_ - this->getRadius())
     {
         v_x_ = -v_x_;
-        play_sound=true;
+        play_sound = true;
     }
 
-    this->move(v_x_ * elapsed.asSeconds(),v_y_ * elapsed.asSeconds());
+    this->move(v_x_ * elapsed.asSeconds(), v_y_ * elapsed.asSeconds());
 
     return play_sound;
 }
@@ -63,12 +63,12 @@ IsGoal Puck::check_goal()
     {
         if(this->getPosition().y > this->down_limit_)
         {
-            this->reset(sf::Vector2f((MIN_GOAL+MAX_GOAL) / 2,(this->up_limit_ + this->down_limit_)/2 + 100));
+            this->reset(sf::Vector2f((MIN_GOAL+MAX_GOAL) / 2, (this->up_limit_ + this->down_limit_) / 2 + 100));
             return BLUE_GOAL;
         }
         else if(this->getPosition().y < this->up_limit_)
         {
-            this->reset(sf::Vector2f((MIN_GOAL+MAX_GOAL) / 2,(this->up_limit_ + this->down_limit_)/2 - 100));
+            this->reset(sf::Vector2f((MIN_GOAL+MAX_GOAL) / 2, (this->up_limit_ + this->down_limit_) / 2 - 100));
             return RED_GOAL;
         }
     }

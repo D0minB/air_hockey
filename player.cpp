@@ -59,10 +59,3 @@ void Player::reset(const sf::Vector2f &position)
     points_=0;
     striker_->setPosition(position);
 }
-
-
-
-
-
-
-
