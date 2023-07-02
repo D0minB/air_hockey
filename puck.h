@@ -1,5 +1,6 @@
 #pragma once
-#include "striker.h"
+#include <SFML/Graphics.hpp>
+#include <striker.h>
 
 enum IsGoal {
     NO_GOAL,
