@@ -3,7 +3,7 @@
 HockeyGame::HockeyGame(const int &W,const int &H) : window_(sf::VideoMode(W, H), "AIR HOCKEY")
 {
     window_.setFramerateLimit(60);
-    window_.setPosition(sf::Vector2i(0,0));
+    window_.setPosition(sf::Vector2i(700,0));
 
     //ICON
     if (!icon_.loadFromFile("resources/images/icon.png"))
