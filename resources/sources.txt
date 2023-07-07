@@ -11,3 +11,6 @@ https://www.fontsquirrel.com/fonts/list/popular
 Textures:
 https://opengameart.org/content/ui-buttons-and-slots
 https://www.codeproject.com/KB/mobile/432054/bariers.jpg
+
+Icon:
+https://cdn-icons-png.flaticon.com/512/3126/3126325.png

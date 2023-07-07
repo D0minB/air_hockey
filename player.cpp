@@ -1,19 +1,19 @@
 #include "player.h"
 
-Player::Player(const int &pos_x,const int &pos_y,const sf::Color &c, const int &up_limit,const int&down_limit)
+Player::Player(const int &pos_x,const int &pos_y,const sf::Color &c1, const sf::Color &c2, const int &up_limit,const int&down_limit)
 {
     Striker *striker = new Striker(50, sf::Vector2f(pos_x,pos_y), up_limit, down_limit);
     striker_ = striker;
-    striker_->setFillColor(c);
-    striker_->setOutlineThickness(5);
-    striker_->setOutlineColor(sf::Color::Black);
+    striker_->setFillColor(c1);
+    striker_->setOutlineThickness(3);
+    striker_->setOutlineColor(c2);
     striker_->setOrigin(striker->getRadius(),striker->getRadius());
 
     Striker *striker2 = new Striker(20, sf::Vector2f(pos_x,pos_y), up_limit, down_limit);
     striker_internal_ = striker2;
-    striker_internal_->setFillColor(c);
-    striker_internal_->setOutlineThickness(5);
-    striker_internal_->setOutlineColor(sf::Color::Black);
+    striker_internal_->setFillColor(c1);
+    striker_internal_->setOutlineThickness(3);
+    striker_internal_->setOutlineColor(c2);
     striker_internal_->setOrigin(striker2->getRadius(),striker2->getRadius());
 }
 
@@ -43,9 +43,9 @@ Striker* Player::get_striker_internal() const
     return striker_internal_;
 }
 
-void Player::animate(const sf::Time &elapsed, const bool &arrows, const sf::Vector2f &puck_position)
+void Player::animate(const sf::Time &elapsed, const bool &arrows, const sf::Vector2f &puck_position, const float &puck_radius)
 {
-    striker_->animate(elapsed, arrows, puck_position);
+    striker_->animate(elapsed, arrows, puck_position, puck_radius);
     striker_internal_->setPosition(striker_->getPosition().x,striker_->getPosition().y);
 }
 

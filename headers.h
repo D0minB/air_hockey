@@ -7,5 +7,3 @@
 #include <cmath>
 #include <string>
 #include <memory>
-
-

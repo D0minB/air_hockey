@@ -2,6 +2,6 @@
 
 int main()
 {
-    HockeyGame game(560, 840);
+    HockeyGame game(660, 1080 - 90);
     game.loop();
 }
