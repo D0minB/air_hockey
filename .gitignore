@@ -12,7 +12,7 @@ release
 *.lai
 *.so
 *.so.*
-*.dll
+.dll
 *.dylib
 
 # Qt-es
