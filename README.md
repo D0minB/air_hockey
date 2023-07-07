@@ -1,27 +1,20 @@
-# Author: Dominik Bogielczyk
-
-# Title: Air Hockey - project - PSiO
-
-# Technology: SFML-2.5.1
+# Technology: 
+- SFML-2.5.1
+- C++
+- QT Creator
 
 # Description
-* Air Hockey to gra zręcznościowa dla 2 graczy. Polega na odbijaniu krążka okrągłym przedmiotem, w Polsce nazywanym grzybkiem, a po angielsku striker. Celem gry jest umieszczenie krążka w bramce przeciwnika.
+* Air Hockey is an arcade game for two players. Where two opposing players try to score goals against each other. Each player has their own striker, which is used to hit the puck.
 
-* Jeden z graczy steruje klawiszami WASD, drugi natomiast strzałkami. Informuje o tym intro przed rozgrywką. Gra kończy się po zdobyciu przez któregoś z graczy ustalonej liczby bramek lub po ustalonym czasie. W mojej wersji w ustawieniach wybieramy jedną z 4 możliwości zakończenia gry, dwie związane są z czasem, a kolejne dwie z wynikiem. Do wyboru mamy 5 lub 7 punktów, bądź 2 lub 3 minuty.
+* The blue striker is controlled by WASD, the red by arrows. The purpose of the game is to score more goals than your opponent. The game ends when one of the players scores the required number of goals or when the time is up, according to the established rules before the game. In my version, in the settings, we choose one of the four possibilities for the game's end. Two are related to time, and the other two are related to the maximum number of goals. We can choose from 5 or 7 points, or 2 or 3 minutes.
 
-# Sources
-Sounds: 
-* https://www.pacdv.com/sounds/mechanical_sounds.html
-* http://freesoundeffect.net/sound/foosball-game-sound-effect
+* A key aspect of implementation was handling collisions: puck and strikers with the table frame, puck with strikers and puck with the goal area.
 
-Music - Capital Cities - Safe and Sound:
-* https://www.youtube.com/watch?v=P-u_1gNcmek
+# Download
+You can download my app for Windows from "install" directory.
 
-Font:
-* https://www.fontsquirrel.com/fonts/list/popular
- 
-Textures:
-* https://opengameart.org/content/ui-buttons-and-slots
-* https://www.codeproject.com/KB/mobile/432054/bariers.jpg
+# Video
+[![Watch the video](https://i.imgur.com/JlXF7Rn.png)](https://www.youtube.com/watch?v=_Z5rty8-4Vk)
+
 
 
