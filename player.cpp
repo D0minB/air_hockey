@@ -1,6 +1,6 @@
 #include "player.h"
 
-Player::Player(const int &pos_x,const int &pos_y,const sf::Color &c1, const sf::Color &c2, const int &up_limit,const int&down_limit)
+Player::Player(const int &pos_x, const int &pos_y, const sf::Color &c1, const sf::Color &c2, const int &up_limit, const int &down_limit)
 {
     Striker *striker = new Striker(50, sf::Vector2f(pos_x,pos_y), up_limit, down_limit);
     striker_ = striker;
@@ -23,7 +23,7 @@ Player::~Player()
     delete striker_internal_;
 }
 
-int Player::get_points() const
+unsigned int Player::get_points() const
 {
     return points_;
 }

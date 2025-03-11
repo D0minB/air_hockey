@@ -37,7 +37,7 @@ private:
     GameState state_ = GameState::menu;
 
     //settings
-    int points_limit_ = 7;
+    unsigned int points_limit_ = 7;
     int time_limit_ = 0; // in minutes
     int ms_ = 0;
     int remained_min_ = time_limit_;
