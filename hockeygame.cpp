@@ -5,25 +5,21 @@ HockeyGame::HockeyGame(const int &W,const int &H) : window_(sf::VideoMode(W, H),
     window_.setFramerateLimit(60);
     window_.setPosition(sf::Vector2i(700,0));
 
-    //ICON
-    if (!icon_.loadFromFile("resources/images/icon.png"))
-        std::cerr << "Could not load icon" << std::endl;
-    else
+    // ICON
+    if (icon_.loadFromFile("resources/images/icon2.png"))
+    {
         window_.setIcon(icon_.getSize().x, icon_.getSize().y, icon_.getPixelsPtr());
+    }
 
-    //TABLE
-    if (!texture_table_->loadFromFile("resources/images/table.png"))
-        std::cerr << "Could not load texture of table" << std::endl;
-    else
+    // TABLE
+    if (texture_table_->loadFromFile("resources/images/table.png"))
     {
         texture_table_->setSmooth(true);
         sprite_table_->setTexture(*texture_table_);
     }
 
-    //BUTTONS
-    if (!texture_button_->loadFromFile("resources/images/button.png"))
-        std::cerr << "Could not load texture of button" << std::endl;
-    else
+    // BUTTONS
+    if (texture_button_->loadFromFile("resources/images/button.png"))
     {
         texture_button_->setSmooth(true);
 
@@ -55,18 +51,15 @@ HockeyGame::HockeyGame(const int &W,const int &H) : window_(sf::VideoMode(W, H),
         settings_buttons_.emplace_back(std::move(button));
     }
 
-    //FONT
-    if(!ttf->loadFromFile("resources/fonts/Roboto-Black.ttf"))
-        std::cerr << "Font not load" << std::endl;
+    // FONT
+    ttf->loadFromFile("resources/fonts/Roboto-Black.ttf");
 
-    //SOUNDS
-    if (!cling_->openFromFile("resources/sounds/cling.wav"))
-        std::cerr << "Cling not load" << std::endl;
-    if (!goal_sound_->openFromFile("resources/sounds/goal.wav"))
-         std::cerr << "Goal sound not load" << std::endl;
-    if (!music_after_match_->openFromFile("resources/sounds/safe_and_sound.wav"))
-        std::cerr << "Music after match not load" << std::endl;
-    else
+
+    // SOUNDS
+    cling_->openFromFile("resources/sounds/cling.wav");
+    goal_sound_->openFromFile("resources/sounds/goal.wav");
+
+    if (music_after_match_->openFromFile("resources/sounds/safe_and_sound.wav"))
     {
         music_after_match_->setVolume(50.f);
         music_after_match_->setPlayingOffset(sf::seconds(15.f));
