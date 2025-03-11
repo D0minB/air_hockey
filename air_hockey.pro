@@ -10,9 +10,9 @@ SOURCES += \
         puck.cpp \
         striker.cpp
 
-INCLUDEPATH += "C:\Users\DELL\Desktop\Dominik\SFML\SFML-2.5.1\include"
+INCLUDEPATH += "C:\Users\DELL\Desktop\Dominik\SFML\SFML-2.6.2\include"
 
-LIBS += -L"C:\Users\DELL\Desktop\Dominik\SFML\SFML-2.5.1\lib"
+LIBS += -L"C:\Users\DELL\Desktop\Dominik\SFML\SFML-2.6.2\lib"
 CONFIG(debug, debug|release){
     LIBS += -lsfml-audio-d -lsfml-graphics-d -lsfml-network-d -lsfml-system-d -lsfml-window-d
 } else {
