@@ -38,10 +38,10 @@ private:
 
     //settings
     unsigned int points_limit_ = 7;
-    int time_limit_ = 0; // in minutes
-    int ms_ = 0;
-    int remained_min_ = time_limit_;
-    int remained_sec_ = 0;
+    unsigned int time_limit_ = 0; // in minutes
+    unsigned int ms_ = 0;
+    unsigned int remained_min_ = time_limit_;
+    unsigned int remained_sec_ = 0;
 
 public:
     HockeyGame(const int &W,const int &H);
