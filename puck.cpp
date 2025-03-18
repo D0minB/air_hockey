@@ -33,7 +33,7 @@ bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)
         }
     }
 
-    // COLLISION WITH TABLE
+    // Collision with the table
     float next_position_x = this->getPosition().x + v_.x * elapsed.asSeconds();
     float next_position_y = this->getPosition().y + v_.y * elapsed.asSeconds();
 
@@ -57,24 +57,24 @@ bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)
 
 IsGoal Puck::check_goal()
 {
-    const int MIN_GOAL = 180;
-    const int MAX_GOAL = 480;
+    const unsigned int X_MIN_GOAL = 180;
+    const unsigned int X_MAX_GOAL = 480;
+    const unsigned int Y_BLUE_GOAL = 70;
+    const unsigned int Y_RED_GOAL = 930;
 
-    /*
-    if(this->getPosition().x > MIN_GOAL && this->getPosition().x < MAX_GOAL)
+    bool x_in_range = this->getPosition().x > X_MIN_GOAL && this->getPosition().x < X_MAX_GOAL;
+
+    if(this->getPosition().y > Y_RED_GOAL && x_in_range == true)
     {
-        if(this->getPosition().y > this->top_limit_)
-        {
-            this->reset(sf::Vector2f((MIN_GOAL+MAX_GOAL) / 2, (this->top_limit_ + this->bottom_limit_) / 2 + 100));
-            return BLUE_GOAL;
-        }
-        else if(this->getPosition().y < this->top_limit_)
-        {
-            this->reset(sf::Vector2f((MIN_GOAL+MAX_GOAL) / 2, (this->top_limit_ + this->bottom_limit_) / 2 - 100));
-            return RED_GOAL;
-        }
+        this->reset(sf::Vector2f((X_MIN_GOAL+X_MAX_GOAL) / 2, (Y_BLUE_GOAL + Y_RED_GOAL) / 2 + 100));
+        return BLUE_GOAL;
     }
-    */
+    else if(this->getPosition().y < Y_BLUE_GOAL && x_in_range == true)
+    {
+        this->reset(sf::Vector2f((X_MIN_GOAL+X_MAX_GOAL) / 2, (Y_BLUE_GOAL + Y_RED_GOAL) / 2 - 100));
+        return RED_GOAL;
+    }
+
     return NO_GOAL;
 }
 
