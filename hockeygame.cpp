@@ -5,8 +5,10 @@ HockeyGame::HockeyGame(const int &W,const int &H) : window_(sf::VideoMode(W, H),
     window_.setFramerateLimit(60);
     window_.setPosition(sf::Vector2i(700,0));
 
+    // LOAD RESOURCES
+
     // ICON
-    if (icon_.loadFromFile("resources/images/icon2.png"))
+    if (icon_.loadFromFile("resources/images/icon.png"))
     {
         window_.setIcon(icon_.getSize().x, icon_.getSize().y, icon_.getPixelsPtr());
     }
@@ -53,7 +55,6 @@ HockeyGame::HockeyGame(const int &W,const int &H) : window_(sf::VideoMode(W, H),
 
     // FONT
     ttf->loadFromFile("resources/fonts/Roboto-Black.ttf");
-
 
     // SOUNDS
     cling_->openFromFile("resources/sounds/cling.wav");
@@ -191,7 +192,7 @@ void HockeyGame::draw_match()
     bool play_cling = puck_->animate(elapsed_,strikers);
 
     //REFLECTION SOUND
-    if(play_cling)
+    if(play_cling == true)
     {
         cling_->play();
         cling_->setPlayingOffset(sf::seconds(0.f));

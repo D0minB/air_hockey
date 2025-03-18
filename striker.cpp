@@ -8,20 +8,10 @@ Striker::Striker (const int &r, const sf::Vector2f &position, const int &up,cons
 void Striker::animate(const sf::Time &elapsed, const bool& arrows, const sf::Vector2f &puck_position, const float &puck_radius)
 {
     sf::Keyboard::Key keys[4];
-    if (arrows)
-    {
-        keys[0] = sf::Keyboard::Up;
-        keys[1] = sf::Keyboard::Down;
-        keys[2] = sf::Keyboard::Left;
-        keys[3] = sf::Keyboard::Right;
-    }
-    else
-    {
-        keys[0] = sf::Keyboard::W;
-        keys[1] = sf::Keyboard::S;
-        keys[2] = sf::Keyboard::A;
-        keys[3] = sf::Keyboard::D;
-    }
+    keys[0] = (arrows == true) ? sf::Keyboard::Up    : sf::Keyboard::W;
+    keys[1] = (arrows == true) ? sf::Keyboard::Down  : sf::Keyboard::S;
+    keys[2] = (arrows == true) ? sf::Keyboard::Left  : sf::Keyboard::A;
+    keys[3] = (arrows == true) ? sf::Keyboard::Right : sf::Keyboard::D;
 
     float dx = this->getPosition().x - puck_position.x;
     float dy = this->getPosition().y - puck_position.y;
