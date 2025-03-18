@@ -13,42 +13,39 @@ bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)
 {
     bool play_sound = false;
 
-    //COLLISION WITH STRIKER
-    for(auto &s :strikers)
+    // COLLISION WITH STRIKER
+    for(auto &striker :strikers)
     {
-        float deltaX = this->getPosition().x - s.getPosition().x;
-        float deltaY = this->getPosition().y - s.getPosition().y;
+        float deltaX = this->getPosition().x - striker.getPosition().x;
+        float deltaY = this->getPosition().y - striker.getPosition().y;
         float distance = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
-        float abs_dx = std::abs(s.getPosition().x - s.get_previous_position().x);
-        float abs_dy = std::abs(s.getPosition().y - s.get_previous_position().y);
+        float abs_dx = std::abs(striker.getPosition().x - striker.get_previous_position().x);
+        float abs_dy = std::abs(striker.getPosition().y - striker.get_previous_position().y);
 
         const int v0 = 80;
         const int v1 = 100;
 
-        if(distance <= this->getRadius() + s.getRadius() + 5)
+        if(distance <= this->getRadius() + striker.getRadius() + 5)
         {
             play_sound = true;
-            this->v_.x = (this->getPosition().x < s.getPosition().x) ? -std::abs(v0 + v1 * abs_dx) : std::abs(v0 + v1 * abs_dx);
-            this->v_.y = (this->getPosition().y < s.getPosition().y) ? -std::abs(v0 + v1 * abs_dy) : std::abs(v0 + v1 * abs_dy);
+            this->v_.x = (this->getPosition().x < striker.getPosition().x) ? -std::abs(v0 + v1 * abs_dx) : std::abs(v0 + v1 * abs_dx);
+            this->v_.y = (this->getPosition().y < striker.getPosition().y) ? -std::abs(v0 + v1 * abs_dy) : std::abs(v0 + v1 * abs_dy);
         }
     }
 
-    //COLLISION WITH TABLE
-    if(this->getPosition().y<up_limit_ || this->getPosition().y>down_limit_)
+    // COLLISION WITH TABLE
+    float next_position_x = this->getPosition().x + v_.x * elapsed.asSeconds();
+    float next_position_y = this->getPosition().y + v_.y * elapsed.asSeconds();
+
+    if(next_position_y < top_limit_ || next_position_y > bottom_limit_)
     {
-        v_.y = -v_.y;
+        v_.y *= -1;
         play_sound = true;
     }
-    if(this->getPosition().x < this->left_limit_ + this->getRadius())
+
+    if(next_position_x < this->left_limit_ || next_position_x > this->right_limit_)
     {
-        this->setPosition(sf::Vector2f(left_limit_ + 1.2 * this->getRadius(), this->getPosition().y));
-        v_.x = -v_.x;
-        play_sound = true;
-    }
-    else if(this->getPosition().x > this->right_limit_ - this->getRadius())
-    {
-        this->setPosition(sf::Vector2f(right_limit_ - 1.2 * this->getRadius(), this->getPosition().y));
-        v_.x = -v_.x;
+        v_.x *= -1;
         play_sound = true;
     }
 
@@ -63,19 +60,21 @@ IsGoal Puck::check_goal()
     const int MIN_GOAL = 180;
     const int MAX_GOAL = 480;
 
+    /*
     if(this->getPosition().x > MIN_GOAL && this->getPosition().x < MAX_GOAL)
     {
-        if(this->getPosition().y > this->down_limit_)
+        if(this->getPosition().y > this->top_limit_)
         {
-            this->reset(sf::Vector2f((MIN_GOAL+MAX_GOAL) / 2, (this->up_limit_ + this->down_limit_) / 2 + 100));
+            this->reset(sf::Vector2f((MIN_GOAL+MAX_GOAL) / 2, (this->top_limit_ + this->bottom_limit_) / 2 + 100));
             return BLUE_GOAL;
         }
-        else if(this->getPosition().y < this->up_limit_)
+        else if(this->getPosition().y < this->top_limit_)
         {
-            this->reset(sf::Vector2f((MIN_GOAL+MAX_GOAL) / 2, (this->up_limit_ + this->down_limit_) / 2 - 100));
+            this->reset(sf::Vector2f((MIN_GOAL+MAX_GOAL) / 2, (this->top_limit_ + this->bottom_limit_) / 2 - 100));
             return RED_GOAL;
         }
     }
+    */
     return NO_GOAL;
 }
 
