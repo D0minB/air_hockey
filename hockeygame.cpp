@@ -1,5 +1,10 @@
 #include "hockeygame.h"
 
+
+#define GET_TEXT_COLOR(button, mouse_pos) \
+((button->getGlobalBounds().contains((mouse_pos).x, (mouse_pos).y)) ? sf::Color::Yellow : sf::Color::White)
+
+
 HockeyGame::HockeyGame(const int &W,const int &H) : window_(sf::VideoMode(W, H), "AIR HOCKEY")
 {
     window_.setFramerateLimit(60);
@@ -230,15 +235,24 @@ void HockeyGame::draw_match()
 
 void HockeyGame::draw_menu()
 {
-    sf::Text title = print_text(ttf,"\tAIR\nHOCKEY\n\n",75,sf::Color::Black,sf::Vector2f(190,160));
-    sf::Text buttons_text= print_text(ttf,"\tSTART\n\nSETTINGS",35,sf::Color::White,sf::Vector2f(245,650));
+    // Cache mouse position
+    sf::Vector2i mouse_pos = sf::Mouse::getPosition(window_);
+
+    // Update text colors based on mouse position
+    sf::Color start_text_color = GET_TEXT_COLOR(menu_buttons_[0], mouse_pos);
+    sf::Color settings_text_color = GET_TEXT_COLOR(menu_buttons_[1], mouse_pos);
+
+    sf::Text title = print_text(ttf,"\tAIR\nHOCKEY", 75, sf::Color::Black, sf::Vector2f(190,160));
+    sf::Text button_start_text = print_text(ttf,"\tSTART", 35, start_text_color, sf::Vector2f(245,650));
+    sf::Text button_settings_text = print_text(ttf,"\n\n SETTINGS", 35, settings_text_color, sf::Vector2f(245,650));
 
     for(const auto &el : menu_buttons_)
     {
         window_.draw(*el);
     }
     window_.draw(title);
-    window_.draw(buttons_text);
+    window_.draw(button_start_text);
+    window_.draw(button_settings_text);
 }
 
 void HockeyGame::draw_intro()
