@@ -186,6 +186,17 @@ void HockeyGame::draw_match()
 
     std::vector<Striker> strikers={*player_blue_->get_striker(),*player_red_->get_striker()};
 
+    //PUCK ANIMATE
+    bool play_cling = puck_->animate(elapsed_,strikers);
+
+    //REFLECTION SOUND
+    if(play_cling == true)
+    {
+        cling_->play();
+        cling_->setPlayingOffset(sf::seconds(0.f));
+    }
+
+
     //DISPLAY RESULT
     std::string result = std::to_string(player_blue_->get_points())+"\n"+std::to_string(player_red_->get_points());
     sf::Text result_text = print_text(ttf,result,120,sf::Color::Black,sf::Vector2f(570,350));
@@ -195,16 +206,6 @@ void HockeyGame::draw_match()
         std::string time_string = std::to_string(remained_min_) + ":" + (remained_sec_ < 10 ? "0" : "") + std::to_string(remained_sec_);
         sf::Text remained_time = print_text(ttf,time_string,40,sf::Color::Black,sf::Vector2f(40,450));
         window_.draw(remained_time);
-    }
-
-    //PUCK ANIMATE
-    bool play_cling = puck_->animate(elapsed_,strikers);
-
-    //REFLECTION SOUND
-    if(play_cling == true)
-    {
-        cling_->play();
-        cling_->setPlayingOffset(sf::seconds(0.f));
     }
 
     IsGoal goal_info = puck_->check_goal();
@@ -364,7 +365,6 @@ void HockeyGame::loop()
                     remained_min_ = time_limit_;
                     remained_sec_ = 0;
                 }
-
                 else if(IS_BUTTON_CLICKED(menu_buttons_[static_cast<size_t>(MenuButton::settings)], mouse_pos))
                 {
                     state_ = GameState::settings;
