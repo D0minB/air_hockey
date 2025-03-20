@@ -5,6 +5,10 @@
 ((button->getGlobalBounds().contains((mouse_pos).x, (mouse_pos).y)) ? sf::Color::Yellow : sf::Color::White)
 
 
+#define IS_BUTTON_CLICKED(button, mouse_pos) \
+(button->getGlobalBounds().contains(mouse_pos.x, mouse_pos.y))
+
+
 HockeyGame::HockeyGame(const int &W,const int &H) : window_(sf::VideoMode(W, H), "AIR HOCKEY")
 {
     window_.setFramerateLimit(60);
@@ -342,60 +346,61 @@ void HockeyGame::loop()
 
         sf::Vector2i mouse_pos = sf::Mouse::getPosition(window_);
 
-        if(state_ == GameState::menu)
+        // Handle Enter in intro
+        if(state_ == GameState::intro && event.key.code == sf::Keyboard::Enter)
         {
-            if(event.mouseButton.button == sf::Mouse::Left)
-            {
-                //BUTTON "START"
-                if(menu_buttons_[0]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y))
+            state_ = GameState::match;
+        }
+
+        // Handle Left-click in other states
+        if(event.mouseButton.button == sf::Mouse::Left)
+        {
+            switch (state_) {
+
+            case GameState::menu:
+                if(IS_BUTTON_CLICKED(menu_buttons_[static_cast<size_t>(MenuButton::start)], mouse_pos))
                 {
                     state_ = GameState::intro;
                     remained_min_ = time_limit_;
                     remained_sec_ = 0;
                 }
-                //BUTTON "SETTINGS"
-                else if(menu_buttons_[1]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y))
+
+                else if(IS_BUTTON_CLICKED(menu_buttons_[static_cast<size_t>(MenuButton::settings)], mouse_pos))
+                {
                     state_ = GameState::settings;
-            }
+                }
+                break;
 
-        }
-        else if(state_ == GameState::settings)
-        {
-            if(event.mouseButton.button == sf::Mouse::Left)
-            {
-                if(settings_buttons_[0]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y))
+            case GameState::settings:
+                if(IS_BUTTON_CLICKED(settings_buttons_[static_cast<size_t>(SettingsButton::five_points)], mouse_pos))
                 {
-                    points_limit_ = 5; //BUTTON "5 points"
+                    points_limit_ = 5;
                     time_limit_ = 0;
                 }
-                else if(settings_buttons_[1]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y))
+                else if(IS_BUTTON_CLICKED(settings_buttons_[static_cast<size_t>(SettingsButton::two_minutes)], mouse_pos))
                 {
-                    time_limit_ = 2; //BUTTON "2 minutes"
+                    time_limit_ = 2;
                     points_limit_ = 0;
                 }
-                else if(settings_buttons_[2]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y))
+                else if(IS_BUTTON_CLICKED(settings_buttons_[static_cast<size_t>(SettingsButton::seven_points)], mouse_pos))
                 {
-                    points_limit_ = 7; //BUTTON "7 points"
+                    points_limit_ = 7;
                     time_limit_ = 0;
                 }
-                else if(settings_buttons_[3]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y))
+                else if(IS_BUTTON_CLICKED(settings_buttons_[static_cast<size_t>(SettingsButton::three_minutes)], mouse_pos))
                 {
-                    time_limit_ = 3; //BUTTON "3 minutes"
+                    time_limit_ = 3;
                     points_limit_ = 0;
                 }
-                else if(settings_buttons_[4]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y))
-                    state_ = GameState::menu; //BUTTON "OK"
-            }
-        }
-        else if (state_ == GameState::intro && event.key.code == sf::Keyboard::Enter)
-            state_ = GameState::match;
+                else if(IS_BUTTON_CLICKED(settings_buttons_[static_cast<size_t>(SettingsButton::save)], mouse_pos))
+                {
+                    state_ = GameState::menu;
+                }
+                break;
 
-        else if(state_ == GameState::after_match)
-        {
-            if(event.mouseButton.button == sf::Mouse::Left)
-            {
-                //BUTTON "NEW GAME"
-                if(end_buttons_[0]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y))
+
+            case GameState::after_match:
+                if(IS_BUTTON_CLICKED(end_buttons_[static_cast<size_t>(AfterMatchButton::new_game)], mouse_pos))
                 {
                     puck_->reset(sf::Vector2f(550, 495));
                     player_blue_->reset(sf::Vector2f(330, 190));
@@ -408,13 +413,16 @@ void HockeyGame::loop()
                     music_after_match_->stop();
                     music_after_match_->setPlayingOffset(sf::seconds(15.f));
                 }
-
-                //BUTTON "CLOSE"
-                else if(end_buttons_[1]->getGlobalBounds().contains(mouse_pos.x,mouse_pos.y))
+                else if(IS_BUTTON_CLICKED(end_buttons_[static_cast<size_t>(AfterMatchButton::close)], mouse_pos))
+                {
                     window_.close();
+                }
+                break;
+
+            default:
+                break;
             }
         }
-
         this->draw();
     }
 }

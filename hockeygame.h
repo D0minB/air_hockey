@@ -2,14 +2,40 @@
 #include "player.h"
 #include "puck.h"
 
+
 enum class GameState
 {
-    menu,
+    menu = 0,
     settings,
     intro,
     match,
     after_match
 };
+
+
+enum class MenuButton
+{
+    start = 0,
+    settings
+};
+
+
+enum class SettingsButton
+{
+    five_points = 0,
+    two_minutes,
+    seven_points,
+    three_minutes,
+    save
+};
+
+
+enum class AfterMatchButton
+{
+    new_game = 0,
+    close
+};
+
 
 class HockeyGame
 {
