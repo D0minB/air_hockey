@@ -16,8 +16,6 @@ void Striker::animate(const sf::Time &elapsed, const bool &arrows, const sf::Vec
     keys[2] = (arrows == true) ? sf::Keyboard::Left  : sf::Keyboard::A;
     keys[3] = (arrows == true) ? sf::Keyboard::Right : sf::Keyboard::D;
 
-    constexpr float playerRadius = 5.0f;
-
     // Calculate distance from puck to striker
     float x_movement = v_.x * elapsed.asSeconds();
     float y_movement = v_.y * elapsed.asSeconds();
@@ -42,13 +40,13 @@ void Striker::animate(const sf::Time &elapsed, const bool &arrows, const sf::Vec
         if (isCollisionFree(this->getPosition().x, nextY))
             this->move(0, y_movement);
     }
-    if (sf::Keyboard::isKeyPressed(keys[2]) && this->getPosition().x > left_limit_ + playerRadius)
+    if (sf::Keyboard::isKeyPressed(keys[2]) && this->getPosition().x > left_limit_ + this->getRadius())
     {
         float nextX = this->getPosition().x - x_movement;
         if (isCollisionFree(nextX, this->getPosition().y))
             this->move(-x_movement, 0);
     }
-    if (sf::Keyboard::isKeyPressed(keys[3]) && this->getPosition().x < right_limit_ - playerRadius)
+    if (sf::Keyboard::isKeyPressed(keys[3]) && this->getPosition().x < right_limit_ - this->getRadius())
     {
         float nextX = this->getPosition().x + x_movement;
         if (isCollisionFree(nextX, this->getPosition().y))
