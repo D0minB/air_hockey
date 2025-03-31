@@ -61,17 +61,19 @@ IsGoal Puck::check_goal()
     constexpr unsigned int X_MAX_GOAL = 480;
     constexpr unsigned int Y_BLUE_GOAL = 70;
     constexpr unsigned int Y_RED_GOAL = 930;
+    constexpr unsigned int X_MID = (X_MIN_GOAL + X_MAX_GOAL) / 2;
+    constexpr unsigned int Y_MID = (Y_BLUE_GOAL + Y_RED_GOAL) / 2;
 
     bool x_in_range = this->getPosition().x > X_MIN_GOAL && this->getPosition().x < X_MAX_GOAL;
 
     if(this->getPosition().y > Y_RED_GOAL && x_in_range == true)
     {
-        this->reset(sf::Vector2f((X_MIN_GOAL+X_MAX_GOAL) / 2, (Y_BLUE_GOAL + Y_RED_GOAL) / 2 + 100));
+        this->reset(sf::Vector2f(X_MID, Y_MID + 100));
         return BLUE_GOAL;
     }
     else if(this->getPosition().y < Y_BLUE_GOAL && x_in_range == true)
     {
-        this->reset(sf::Vector2f((X_MIN_GOAL+X_MAX_GOAL) / 2, (Y_BLUE_GOAL + Y_RED_GOAL) / 2 - 100));
+        this->reset(sf::Vector2f(X_MID, Y_MID - 100));
         return RED_GOAL;
     }
 
