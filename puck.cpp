@@ -11,7 +11,10 @@ Puck::Puck(const float &r, const sf::Vector2f &position)
 
 bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)
 {
-    bool play_sound = false;
+    float accumulated_move_x = 0.0f;
+    float accumulated_move_y = 0.0f;
+    bool collision_with_striker = false;
+    bool collision_with_table = false;
 
     // Collision with the table
     float next_position_x = this->getPosition().x + this->v_.x * elapsed.asSeconds();
@@ -20,16 +23,17 @@ bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)
     if(next_position_y < top_limit_ || next_position_y > bottom_limit_)
     {
         v_.y *= -1;
-        play_sound = true;
+        collision_with_table = true;
     }
 
     if(next_position_x < this->left_limit_ || next_position_x > this->right_limit_)
     {
         v_.x *= -1;
-        play_sound = true;
+        collision_with_table = true;
     }
 
     this->move(v_.x * elapsed.asSeconds(), v_.y * elapsed.asSeconds());
+
 
     // Collision with the strikers
     for(auto &striker :strikers)
@@ -45,13 +49,21 @@ bool Puck::animate(const sf::Time &elapsed, std::vector<Striker> &strikers)
 
         if(distance <= this->getRadius() + striker.getRadius() + 5)
         {
-            play_sound = true;
-            this->v_.x = (this->getPosition().x < striker.getPosition().x) ? -std::abs(v0 + v1 * abs_dx) : std::abs(v0 + v1 * abs_dx);
-            this->v_.y = (this->getPosition().y < striker.getPosition().y) ? -std::abs(v0 + v1 * abs_dy) : std::abs(v0 + v1 * abs_dy);
+            collision_with_striker = true;
+            accumulated_move_x += (this->getPosition().x < striker.getPosition().x) ? -std::abs(v0 + v1 * abs_dx) : std::abs(v0 + v1 * abs_dx);
+            accumulated_move_y += (this->getPosition().y < striker.getPosition().y) ? -std::abs(v0 + v1 * abs_dy) : std::abs(v0 + v1 * abs_dy);
         }
     }
 
-    return play_sound;
+    // Update puck velocities
+    if(collision_with_striker == true)
+    {
+        this->v_.x = accumulated_move_x;
+        this->v_.y = accumulated_move_y;
+    }
+
+    // Play sound
+    return (collision_with_striker || collision_with_table);
 }
 
 
