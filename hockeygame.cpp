@@ -132,40 +132,55 @@ void HockeyGame::draw_after_match()
     int redPoints = player_red_->get_points();
 
     std::stringstream ss;
+
+    // Determine winner and set corresponding color
+    std::string winnerText;
     sf::Color c;
 
     if (bluePoints > redPoints)
     {
-        ss << " BLUE PLAYER WINS\n\t\t\t   " << bluePoints << "-" << redPoints;
+        winnerText = "BLUE PLAYER WINS";
         c = sf::Color::Blue;
     }
     else if (bluePoints < redPoints)
     {
-        ss << " RED PLAYER WINS\n\t\t\t   " << redPoints << "-" << bluePoints;
+        winnerText = "RED PLAYER WINS";
         c = sf::Color::Red;
     }
     else
     {
-        ss << " DRAW " << bluePoints << "-" << redPoints;
+        winnerText = "\t\t\tDRAW";
         c = sf::Color::Black;
     }
 
-    sf::Text summary = print_text(ttf, ss.str(), 60, c, sf::Vector2f(60,200));
-    sf::Text buttons_text= print_text(ttf,"NEW MATCH\n\n       CLOSE",35, sf::Color::White, sf::Vector2f(220,650));
+    // Format output string
+    ss << " " << winnerText << "\n\t\t\t   " << bluePoints << "-" << redPoints;
+
+    // Cache mouse position
+    sf::Vector2i mouse_pos = sf::Mouse::getPosition(window_);
+
+    // Update text colors based on mouse position
+    sf::Color new_match_text_color = GET_TEXT_COLOR(end_buttons_[static_cast<size_t>(AfterMatchButton::new_game)], mouse_pos);
+    sf::Color close_text_color = GET_TEXT_COLOR(end_buttons_[static_cast<size_t>(AfterMatchButton::close)], mouse_pos);
+
+    sf::Text summary = print_text(ttf, ss.str(), 60, c, sf::Vector2f(60, 200));
+    sf::Text buttons_text1= print_text(ttf,"NEW MATCH",35, new_match_text_color, sf::Vector2f(220, 650));
+    sf::Text buttons_text2= print_text(ttf,"CLOSE",35, close_text_color, sf::Vector2f(270, 730));
 
     for(const auto &el : end_buttons_)
     {
         window_.draw(*el);
     }
     window_.draw(summary);
-    window_.draw(buttons_text);
+    window_.draw(buttons_text1);
+    window_.draw(buttons_text2);
 }
 
 void HockeyGame::draw_match()
 {
     ms_ += elapsed_.asMilliseconds();
 
-    if(ms_>=1000 && !(remained_min_==0 && remained_sec_==0))
+    if(ms_>=100 && !(remained_min_==0 && remained_sec_==0))
     {
         ms_=0;
         if(remained_sec_ == 0)
@@ -174,7 +189,7 @@ void HockeyGame::draw_match()
             remained_sec_ = 59;
         }
         else
-            remained_sec_-=1;
+            remained_sec_ -= 1;
     }
 
     //PLAYERS MOVE
@@ -195,7 +210,6 @@ void HockeyGame::draw_match()
         cling_->play();
         cling_->setPlayingOffset(sf::seconds(0.f));
     }
-
 
     //DISPLAY RESULT
     std::string result = std::to_string(player_blue_->get_points())+"\n"+std::to_string(player_red_->get_points());
@@ -223,8 +237,8 @@ void HockeyGame::draw_match()
             player_red_->add_point();
     }
 
-    if(((player_blue_->get_points()==points_limit_ || player_red_->get_points()==points_limit_) && points_limit_>0)
-            || (time_limit_>0 && remained_min_==0 && remained_sec_==0))
+    if ((points_limit_ > 0 && (player_blue_->get_points() == points_limit_ || player_red_->get_points() == points_limit_)) ||
+        (time_limit_ > 0 && remained_min_ == 0 && remained_sec_ == 0))
     {
         state_ = GameState::after_match;
         music_after_match_->play();
@@ -244,8 +258,8 @@ void HockeyGame::draw_menu()
     sf::Vector2i mouse_pos = sf::Mouse::getPosition(window_);
 
     // Update text colors based on mouse position
-    sf::Color start_text_color = GET_TEXT_COLOR(menu_buttons_[0], mouse_pos);
-    sf::Color settings_text_color = GET_TEXT_COLOR(menu_buttons_[1], mouse_pos);
+    sf::Color start_text_color = GET_TEXT_COLOR(menu_buttons_[static_cast<size_t>(MenuButton::start)], mouse_pos);
+    sf::Color settings_text_color = GET_TEXT_COLOR(menu_buttons_[static_cast<size_t>(MenuButton::settings)], mouse_pos);
 
     sf::Text title = print_text(ttf,"\tAIR\nHOCKEY", 75, sf::Color::Black, sf::Vector2f(190,160));
     sf::Text button_start_text = print_text(ttf,"\tSTART", 35, start_text_color, sf::Vector2f(245,650));
