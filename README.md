@@ -1,5 +1,5 @@
 # Technology: 
-- SFML-2.5.1
+- SFML-2.6.2
 - C++
 - QT Creator
 
